@@ -18,9 +18,11 @@
 		Showcase of WComponents.
 	</description>
 
+<!--
 	<properties>
 		<wc.qa.skip>false</wc.qa.skip>
 	</properties>
+	-->
 
 	<dependencies>
 
@@ -31,6 +33,20 @@
 		</dependency>
 
 	</dependencies>
-	
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<!--  We want to include the source code as well, so that it can be viewed in the example picker -->
+			<resource>
+				<directory>src/main/java</directory>
+			</resource>
+			<resource>
+				<directory>../wcomponents-core/src/main/java</directory>
+			</resource>
+		</resources>
+	</build>
 
 </project>
