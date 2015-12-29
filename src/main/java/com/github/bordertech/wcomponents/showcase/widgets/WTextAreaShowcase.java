@@ -7,16 +7,27 @@ import com.github.bordertech.wcomponents.WCheckBox;
 import com.github.bordertech.wcomponents.WContainer;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WPanel;
-import com.github.bordertech.wcomponents.WTextField;
+import com.github.bordertech.wcomponents.WTextArea;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author jonathan
  */
-public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
+public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 
-	public WTextFieldShowcase() {
-		super(WTextField.class);
+	private static final List<Class> RELATED;
+
+	static {
+		List<Class> list = new ArrayList<>();
+		list.add(WTextFieldShowcase.class.getClass());
+		RELATED = Collections.unmodifiableList(list);
+	}
+
+	public WTextAreaShowcase() {
+		super(WTextArea.class);
 	}
 
 	@Override
@@ -25,27 +36,32 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final WidgetContainer<WTextField> itemPanel) {
+	public PropertyContainer getPropertyContainerInstance(final WidgetContainer<WTextArea> itemPanel) {
 		return new PropertiesPanel(itemPanel.getWidget());
 	}
 
 	@Override
-	public String getPseudoCode() {
-		return "package my.sample;";
+	public List<Class> getRelatedWidgets() {
+		return RELATED;
 	}
 
-	public static class WidgetPanel extends WPanel implements WidgetContainer<WTextField> {
+	@Override
+	public String getPseudoCode() {
+		return "package my.sample2;";
+	}
 
-		private final WTextField widget = new WTextField();
+	public static class WidgetPanel extends WPanel implements WidgetContainer<WTextArea> {
+
+		private final WTextArea widget = new WTextArea();
 
 		public WidgetPanel() {
 			WFieldLayout layout = new WFieldLayout();
 			add(layout);
-			layout.addField("Textfield", widget);
+			layout.addField("Textarea", widget);
 		}
 
 		@Override
-		public WTextField getWidget() {
+		public WTextArea getWidget() {
 			return widget;
 		}
 	}
@@ -56,7 +72,7 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 
 		private final WContainer ajaxContainer = new WContainer();
 
-		public PropertiesPanel(final WTextField widget) {
+		public PropertiesPanel(final WTextArea widget) {
 
 			add(layout);
 			add(ajaxContainer);
@@ -80,6 +96,17 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 					widget.setDisabled(chb2.isSelected());
 				}
 			});
+
+			final WCheckBox chb3 = new WCheckBox();
+			layout.addField("Rich text", chb3);
+			ajaxContainer.add(new WAjaxControl(chb3, widget));
+			chb3.setActionOnChange(new Action() {
+				@Override
+				public void execute(ActionEvent event) {
+					widget.setRichTextArea(chb3.isSelected());
+				}
+			});
+
 		}
 
 	}

@@ -1,12 +1,17 @@
 package com.github.bordertech.wcomponents.showcase;
 
 import com.github.bordertech.wcomponents.HeadingLevel;
+import com.github.bordertech.wcomponents.InternalResource;
 import com.github.bordertech.wcomponents.Margin;
 import com.github.bordertech.wcomponents.Message;
 import com.github.bordertech.wcomponents.MessageContainer;
+import com.github.bordertech.wcomponents.Request;
+import com.github.bordertech.wcomponents.UIContext;
+import com.github.bordertech.wcomponents.UIContextHolder;
 import com.github.bordertech.wcomponents.WApplication;
 import com.github.bordertech.wcomponents.WColumn;
 import com.github.bordertech.wcomponents.WComponent;
+import com.github.bordertech.wcomponents.WContent;
 import com.github.bordertech.wcomponents.WHeading;
 import com.github.bordertech.wcomponents.WMessages;
 import com.github.bordertech.wcomponents.WPanel;
@@ -17,6 +22,7 @@ import com.github.bordertech.wcomponents.WebUtilities;
 import com.github.bordertech.wcomponents.showcase.widgets.PropertyContainer;
 import com.github.bordertech.wcomponents.showcase.widgets.Showcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WidgetContainer;
+import com.github.bordertech.wcomponents.util.Config;
 import java.util.Date;
 
 /**
@@ -36,6 +42,15 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	private final WPanel properties = new WPanel();
 	private final InfoPanel info = new InfoPanel();
 	private final SourcePanel source = new SourcePanel();
+	/**
+	 * Additional Javascript used to provide syntax-highlighting client-side.
+	 */
+	private final WContent javascript = new WContent();
+
+	/**
+	 * Additional CSS used to provide syntax-highlighting client-side.
+	 */
+	private final WContent css = new WContent();
 
 	/**
 	 * Construct the controller.
@@ -88,6 +103,16 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		picker.setAjaxTargets(left, holderProperties, holderInfo, holderSource);
 
 		setShowcaseVisible(false);
+
+		String version = Config.getInstance().getString("wcomponents-examples.version");
+		javascript.setCacheKey("wc.showcase.js." + version);
+		css.setCacheKey("wc.showcase.css." + version);
+
+		javascript.setContentAccess(new InternalResource("/js/syntaxHighlight.js", "syntaxHighlight.js"));
+		css.setContentAccess(new InternalResource("/css/syntaxHighlight.css", "syntaxHighlight.css"));
+		add(javascript);
+		add(css);
+
 	}
 
 	@Override
@@ -108,6 +133,21 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		root.setBean(showcase);
 
 		setShowcaseVisible(true);
+	}
+
+	/**
+	 * Override preparePaint in order to set up the resources on first access by a user.
+	 *
+	 * @param request the request being responded to.
+	 */
+	@Override
+	protected void preparePaintComponent(final Request request) {
+		super.preparePaintComponent(request);
+		UIContext uic = UIContextHolder.getCurrent();
+		uic.getHeaders().addUniqueHeadLine("<script type='text/javascript' src='" + WebUtilities.
+				encode(javascript.getUrl()) + "'></script>");
+		uic.getHeaders().addUniqueHeadLine(
+				"<link type='text/css' rel='stylesheet' href='" + WebUtilities.encode(css.getUrl()) + "'></link>");
 	}
 
 	private void resetShowcase() {

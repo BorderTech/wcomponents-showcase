@@ -1,18 +1,12 @@
 package com.github.bordertech.wcomponents.showcase;
 
-import com.github.bordertech.wcomponents.InternalResource;
 import com.github.bordertech.wcomponents.RenderContext;
 import com.github.bordertech.wcomponents.Request;
-import com.github.bordertech.wcomponents.UIContext;
-import com.github.bordertech.wcomponents.UIContextHolder;
-import com.github.bordertech.wcomponents.WContent;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WText;
-import com.github.bordertech.wcomponents.WebUtilities;
 import com.github.bordertech.wcomponents.servlet.WebXmlRenderContext;
 import com.github.bordertech.wcomponents.showcase.util.SourceUtil;
 import com.github.bordertech.wcomponents.showcase.widgets.Showcase;
-import com.github.bordertech.wcomponents.util.Config;
 import java.io.PrintWriter;
 
 /**
@@ -28,16 +22,6 @@ public class SourcePanel extends WPanel {
 	private final WText source = new WText();
 
 	/**
-	 * Additional Javascript used to provide syntax-highlighting client-side.
-	 */
-	private final WContent javascript = new WContent();
-
-	/**
-	 * Additional CSS used to provide syntax-highlighting client-side.
-	 */
-	private final WContent css = new WContent();
-
-	/**
 	 * Creates a SourcePanel.
 	 */
 	public SourcePanel() {
@@ -46,16 +30,6 @@ public class SourcePanel extends WPanel {
 
 		source.setEncodeText(false);
 		add(source);
-
-		String version = Config.getInstance().getString("wcomponents-examples.version");
-		javascript.setCacheKey("wc.showcase.js." + version);
-		css.setCacheKey("wc.showcase.css." + version);
-
-		javascript.setContentAccess(new InternalResource("/js/syntaxHighlight.js", "syntaxHighlight.js"));
-		css.setContentAccess(new InternalResource("/css/syntaxHighlight.css", "syntaxHighlight.css"));
-		add(javascript);
-		add(css);
-
 	}
 
 	/**
@@ -76,18 +50,11 @@ public class SourcePanel extends WPanel {
 	@Override
 	protected void preparePaintComponent(final Request request) {
 		super.preparePaintComponent(request);
-
 		if (!isInitialised()) {
 			Showcase item = getShowcase();
 			String formatted = SourceUtil.formatSource(item.getPseudoCode());
 			source.setText(formatted);
 		}
-
-		UIContext uic = UIContextHolder.getCurrent();
-		uic.getHeaders().addUniqueHeadLine("<script type='text/javascript' src='" + WebUtilities.
-				encode(javascript.getUrl()) + "'></script>");
-		uic.getHeaders().addUniqueHeadLine(
-				"<link type='text/css' rel='stylesheet' href='" + WebUtilities.encode(css.getUrl()) + "'></link>");
 	}
 
 	/**

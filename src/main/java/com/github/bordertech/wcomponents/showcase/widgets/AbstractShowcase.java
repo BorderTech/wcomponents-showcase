@@ -1,7 +1,8 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.WComponent;
-import com.github.bordertech.wcomponents.showcase.util.SourceUtil;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -26,10 +27,8 @@ public abstract class AbstractShowcase<T extends WComponent> implements Showcase
 	}
 
 	@Override
-	public String getInfo() {
-		String source = SourceUtil.getSource(getWidgetClass().getName());
-		// TODO cache the result
-		String info = SourceUtil.getJavaDoc(source);
-		return info;
+	public List<Class> getRelatedWidgets() {
+		return Collections.EMPTY_LIST;
 	}
+
 }
