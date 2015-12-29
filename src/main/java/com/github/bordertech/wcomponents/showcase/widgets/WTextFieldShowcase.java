@@ -1,36 +1,53 @@
-package com.github.bordertech.wcomponents.showcase.item;
+package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.WAjaxControl;
 import com.github.bordertech.wcomponents.WCheckBox;
-import com.github.bordertech.wcomponents.WComponent;
 import com.github.bordertech.wcomponents.WContainer;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WTextField;
-import com.github.bordertech.wcomponents.showcase.ItemPanel;
+import com.github.bordertech.wcomponents.util.Duplet;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author jonathan
  */
-public class WTextFieldItem extends AbstractShowcaseItem {
+public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 
-	public WTextFieldItem() {
-		super("WTextField", "WTextField");
+	public WTextFieldShowcase() {
+		super(WTextField.class);
 	}
 
 	@Override
-	public ItemPanel getItemInstance() {
+	public WidgetContainer getWidgetContainerInstance() {
 		return new WidgetPanel();
 	}
 
-	public WPanel getPropertiesInstance(final ItemPanel itemPanel) {
-		return new PropertiesPanel((WTextField) itemPanel.getItem());
+	@Override
+	public PropertyContainer getPropertyContainerInstance(final WidgetContainer<WTextField> itemPanel) {
+		return new PropertiesPanel(itemPanel.getWidget());
 	}
 
-	public static class WidgetPanel extends WPanel implements ItemPanel {
+	@Override
+	public List<Duplet<String, String>> getRelatedLinks() {
+		return Collections.EMPTY_LIST;
+	}
+
+	@Override
+	public List<Duplet<String, String>> getApiLinks() {
+		return Collections.EMPTY_LIST;
+	}
+
+	@Override
+	public String getPseudoCode() {
+		return "package my.sample;";
+	}
+
+	public static class WidgetPanel extends WPanel implements WidgetContainer<WTextField> {
 
 		private final WTextField widget = new WTextField();
 
@@ -41,12 +58,12 @@ public class WTextFieldItem extends AbstractShowcaseItem {
 		}
 
 		@Override
-		public WComponent getItem() {
+		public WTextField getWidget() {
 			return widget;
 		}
 	}
 
-	public static class PropertiesPanel extends WPanel {
+	public static class PropertiesPanel extends WPanel implements PropertyContainer {
 
 		private final WFieldLayout layout = new WFieldLayout();
 

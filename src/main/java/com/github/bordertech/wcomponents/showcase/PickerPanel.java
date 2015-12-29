@@ -4,14 +4,15 @@ import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.MenuItem;
+import com.github.bordertech.wcomponents.MenuSelectContainer;
 import com.github.bordertech.wcomponents.WAjaxControl;
 import com.github.bordertech.wcomponents.WContainer;
 import com.github.bordertech.wcomponents.WMenu;
 import com.github.bordertech.wcomponents.WMenuItem;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WSubMenu;
-import com.github.bordertech.wcomponents.showcase.item.ShowcaseDataUtil;
-import com.github.bordertech.wcomponents.showcase.item.ShowcaseItem;
+import com.github.bordertech.wcomponents.showcase.util.DataUtil;
+import com.github.bordertech.wcomponents.showcase.widgets.Showcase;
 
 /**
  *
@@ -26,10 +27,11 @@ public class PickerPanel extends WPanel {
 	public PickerPanel(final ShowcaseApp ctrl) {
 		this.ctrl = ctrl;
 
+		menu.setSelectionMode(MenuSelectContainer.SelectionMode.SINGLE);
 		add(menu);
 		add(ajaxContainer);
 
-		addExamples("UI", ShowcaseDataUtil.INPUT_EXAMPLES);
+		addExamples("UI", DataUtil.INPUT_EXAMPLES);
 
 	}
 
@@ -39,20 +41,20 @@ public class PickerPanel extends WPanel {
 	 * @param groupName the name of the group for the examples, or null to add to the menu directly.
 	 * @param entries the examples to add to the group.
 	 */
-	private void addExamples(final String groupName, final ShowcaseItem[] entries) {
+	private void addExamples(final String groupName, final Showcase[] entries) {
+
 		WSubMenu subMenu = new WSubMenu(groupName);
-		subMenu.setSelectionMode(WMenu.SelectionMode.SINGLE);
 		menu.add(subMenu);
 
-		for (ShowcaseItem entry : entries) {
-			WMenuItem item = new WMenuItem(entry.getName());
+		for (Showcase entry : entries) {
+			WMenuItem item = new WMenuItem(entry.getWidgetName());
 			item.setActionObject(entry);
 			subMenu.add(item);
 
 			item.setAction(new Action() {
 				@Override
 				public void execute(final ActionEvent event) {
-					ShowcaseItem item = (ShowcaseItem) event.getActionObject();
+					Showcase item = (Showcase) event.getActionObject();
 					ctrl.doShowItem(item);
 				}
 			});

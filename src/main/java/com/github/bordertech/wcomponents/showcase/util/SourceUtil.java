@@ -1,4 +1,4 @@
-package com.github.bordertech.wcomponents.showcase;
+package com.github.bordertech.wcomponents.showcase.util;
 
 import com.github.bordertech.wcomponents.WTextField;
 import com.github.bordertech.wcomponents.WebUtilities;
