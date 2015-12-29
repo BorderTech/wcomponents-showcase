@@ -10,15 +10,13 @@ import java.util.List;
  */
 public interface Showcase<T extends WComponent> extends Serializable {
 
-	String getWidgetName();
-
 	Class<T> getWidgetClass();
 
 	PropertyContainer getPropertyContainerInstance(WidgetContainer<T> showcasePanel);
 
 	WidgetContainer<T> getWidgetContainerInstance();
 
-	List<Class> getRelatedWidgets();
+	List<String> getRelatedWidgets();
 
 	String getPseudoCode();
 

@@ -13,6 +13,7 @@ import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WSubMenu;
 import com.github.bordertech.wcomponents.showcase.util.DataUtil;
 import com.github.bordertech.wcomponents.showcase.widgets.Showcase;
+import com.github.bordertech.wcomponents.util.Util;
 
 /**
  *
@@ -35,6 +36,20 @@ public class PickerPanel extends WPanel {
 
 	}
 
+	public Showcase selectShowcase(final String widget) {
+		for (MenuItem item : menu.getMenuItems(true)) {
+			if (item instanceof WMenuItem) {
+				WMenuItem menuItem = (WMenuItem) item;
+				Showcase showcase = (Showcase) menuItem.getActionObject();
+				if (Util.equals(widget, showcase.getWidgetClass().getSimpleName())) {
+					menu.setSelectedMenuItem(menuItem);
+					return showcase;
+				}
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Adds a grouped set of examples to the menu.
 	 *
@@ -44,10 +59,11 @@ public class PickerPanel extends WPanel {
 	private void addExamples(final String groupName, final Showcase[] entries) {
 
 		WSubMenu subMenu = new WSubMenu(groupName);
+		subMenu.setSelectionMode(MenuSelectContainer.SelectionMode.SINGLE);
 		menu.add(subMenu);
 
 		for (Showcase entry : entries) {
-			WMenuItem item = new WMenuItem(entry.getWidgetName());
+			WMenuItem item = new WMenuItem(entry.getWidgetClass().getSimpleName());
 			item.setActionObject(entry);
 			subMenu.add(item);
 
@@ -62,7 +78,7 @@ public class PickerPanel extends WPanel {
 		}
 	}
 
-	public void setAjaxTargets(final AjaxTarget... targets) {
+	public void addAjaxTargets(final AjaxTarget... targets) {
 
 		for (MenuItem item : menu.getMenuItems(true)) {
 			if (item instanceof WMenuItem) {

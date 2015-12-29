@@ -1,7 +1,13 @@
 package com.github.bordertech.wcomponents.showcase;
 
+import com.github.bordertech.wcomponents.Action;
+import com.github.bordertech.wcomponents.ActionEvent;
+import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.HeadingLevel;
 import com.github.bordertech.wcomponents.Request;
+import com.github.bordertech.wcomponents.WAjaxControl;
+import com.github.bordertech.wcomponents.WButton;
+import com.github.bordertech.wcomponents.WContainer;
 import com.github.bordertech.wcomponents.WHeading;
 import com.github.bordertech.wcomponents.WLink;
 import com.github.bordertech.wcomponents.WList;
@@ -21,7 +27,7 @@ public class InfoPanel extends WPanel {
 
 	private final WText source = new WText();
 
-	private final WList relatedLinks = new WList(WList.Type.STACKED);
+	private final WList relatedShowcases = new WList(WList.Type.STACKED);
 	private final WList apiSuperLinks = new WList(WList.Type.STACKED);
 	private final WList apiInterfaceLinks = new WList(WList.Type.STACKED);
 
@@ -34,8 +40,9 @@ public class InfoPanel extends WPanel {
 		source.setEncodeText(false);
 		add(source);
 		add(new WHeading(HeadingLevel.H2, "Related"));
-		add(relatedLinks);
-		relatedLinks.setRepeatedComponent(new WText());
+		add(relatedShowcases);
+		relatedShowcases.setRepeatedComponent(new RelatedButtonPanel());
+		relatedShowcases.setBeanProperty("relatedWidgets");
 
 		add(new WHeading(HeadingLevel.H2, "API"));
 		add(apiSuperLinks);
@@ -46,10 +53,14 @@ public class InfoPanel extends WPanel {
 		apiSuperLinks.setRepeatedComponent(new ApiLink());
 		apiInterfaceLinks.setRepeatedComponent(new ApiLink());
 
-		relatedLinks.setSearchAncestors(false);
 		apiSuperLinks.setSearchAncestors(false);
 		apiInterfaceLinks.setSearchAncestors(false);
 
+	}
+
+	public void addAjaxTargets(final AjaxTarget... targets) {
+		RelatedButtonPanel panel = (RelatedButtonPanel) relatedShowcases.getRepeatedComponent();
+		panel.addAjaxTargets(targets);
 	}
 
 	@Override
@@ -110,12 +121,46 @@ public class InfoPanel extends WPanel {
 		protected void preparePaintComponent(final Request request) {
 			super.preparePaintComponent(request);
 			if (!isInitialised()) {
-				Class clazz = (Class) getBean();
+				Class clazz = getApiClass();
 				setText(clazz.getSimpleName());
 				String htmlName = '/' + clazz.getName().replace('.', '/') + ".html";
 				setUrl("http://bordertech.github.io/wcomponents/apidocs" + htmlName);
 				setInitialised(true);
 			}
+		}
+
+		private Class getApiClass() {
+			return (Class) getBean();
+		}
+
+	}
+
+	public static class RelatedButtonPanel extends WContainer {
+
+		private final WButton button = new WButton();
+
+		private final WAjaxControl ajax = new WAjaxControl(button);
+
+		public RelatedButtonPanel() {
+			button.setRenderAsLink(true);
+			button.setBeanProperty(".");
+			add(button);
+			add(ajax);
+
+			button.setAction(new Action() {
+				@Override
+				public void execute(ActionEvent event) {
+					ShowcaseApp.getInstance(RelatedButtonPanel.this).doShowItem(getRelatedWidget());
+				}
+			});
+		}
+
+		public void addAjaxTargets(final AjaxTarget... targets) {
+			ajax.addTargets(targets);
+		}
+
+		private String getRelatedWidget() {
+			return (String) getBean();
 		}
 
 	}

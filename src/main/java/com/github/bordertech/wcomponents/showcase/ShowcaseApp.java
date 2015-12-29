@@ -100,7 +100,8 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		footer.add(new WText(new Date().toString()));
 		add(footer);
 
-		picker.setAjaxTargets(left, holderProperties, holderInfo, holderSource);
+		picker.addAjaxTargets(left, holderProperties, holderInfo, holderSource);
+		info.addAjaxTargets(picker, left, holderProperties, holderInfo, holderSource);
 
 		setShowcaseVisible(false);
 
@@ -118,6 +119,13 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	@Override
 	public WMessages getMessages() {
 		return messages;
+	}
+
+	public void doShowItem(final String widget) {
+		Showcase showcase = picker.selectShowcase(widget);
+		if (showcase != null) {
+			doShowItem(showcase);
+		}
 	}
 
 	public void doShowItem(final Showcase showcase) {

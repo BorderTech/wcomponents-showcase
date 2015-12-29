@@ -10,6 +10,9 @@ import com.github.bordertech.wcomponents.showcase.widgets.WTextFieldShowcase;
  */
 public final class DataUtil {
 
+	private DataUtil() {
+	}
+
 	/**
 	 * AJAX examples.
 	 */
@@ -17,8 +20,5 @@ public final class DataUtil {
 		new WTextFieldShowcase(),
 		new WTextAreaShowcase()
 	};
-
-	private DataUtil() {
-	}
 
 }

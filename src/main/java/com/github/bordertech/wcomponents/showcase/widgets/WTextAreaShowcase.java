@@ -8,7 +8,7 @@ import com.github.bordertech.wcomponents.WContainer;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WTextArea;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,13 +18,7 @@ import java.util.List;
  */
 public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 
-	private static final List<Class> RELATED;
-
-	static {
-		List<Class> list = new ArrayList<>();
-		list.add(WTextFieldShowcase.class.getClass());
-		RELATED = Collections.unmodifiableList(list);
-	}
+	private static final List<String> RELATED = Collections.unmodifiableList(Arrays.asList("WTextField"));
 
 	public WTextAreaShowcase() {
 		super(WTextArea.class);
@@ -41,7 +35,7 @@ public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 	}
 
 	@Override
-	public List<Class> getRelatedWidgets() {
+	public List<String> getRelatedWidgets() {
 		return RELATED;
 	}
 

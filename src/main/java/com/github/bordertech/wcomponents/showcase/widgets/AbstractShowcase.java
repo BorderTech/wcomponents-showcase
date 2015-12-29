@@ -22,12 +22,7 @@ public abstract class AbstractShowcase<T extends WComponent> implements Showcase
 	}
 
 	@Override
-	public String getWidgetName() {
-		return widget.getSimpleName();
-	}
-
-	@Override
-	public List<Class> getRelatedWidgets() {
+	public List<String> getRelatedWidgets() {
 		return Collections.EMPTY_LIST;
 	}
 
