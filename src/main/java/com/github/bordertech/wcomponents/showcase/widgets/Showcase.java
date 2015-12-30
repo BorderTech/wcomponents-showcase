@@ -16,8 +16,5 @@ public interface Showcase<T extends WComponent> extends Serializable {
 
 	WidgetContainer<T> getWidgetContainerInstance();
 
-	List<String> getRelatedWidgets();
-
-	String getPseudoCode();
-
+	List<Class> getRelatedWidgets();
 }

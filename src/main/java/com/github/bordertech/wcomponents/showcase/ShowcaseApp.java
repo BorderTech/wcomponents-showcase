@@ -35,7 +35,7 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 
 	private final WMessages messages = new WMessages();
 
-	private final WPanel root = new WPanel(WPanel.Type.CHROME);
+	private final WPanel root = new WPanel();
 
 	private final WPanel demo = new WPanel();
 	private final PickerPanel picker = new PickerPanel(this);
@@ -57,12 +57,11 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	 */
 	public ShowcaseApp() {
 		WPanel header = new WPanel(WPanel.Type.HEADER);
-		header.add(new WHeading(HeadingLevel.H1, "Showcase"));
+		header.add(new WHeading(HeadingLevel.H1, "WComponents showcase"));
 		add(header);
 
 		add(messages);
 
-		root.setTitleText("Example");
 		root.setMargin(new Margin(18));
 		root.setSearchAncestors(false);
 		add(root);
@@ -90,7 +89,7 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		holderInfo.add(info);
 		holderSource.add(source);
 
-		tabs.addTab(picker, "Picker", WTabSet.TabMode.CLIENT);
+		tabs.addTab(picker, "Showcases", WTabSet.TabMode.CLIENT);
 		tabs.addTab(holderProperties, "Properties", WTabSet.TabMode.CLIENT);
 		tabs.addTab(holderInfo, "Info", WTabSet.TabMode.CLIENT);
 		tabs.addTab(holderSource, "Source", WTabSet.TabMode.CLIENT);
@@ -121,8 +120,8 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		return messages;
 	}
 
-	public void doShowItem(final String widget) {
-		Showcase showcase = picker.selectShowcase(widget);
+	public void doShowItemByWidgetClass(final Class clazz) {
+		Showcase showcase = picker.selectShowcaseByWidgetClass(clazz);
 		if (showcase != null) {
 			doShowItem(showcase);
 		}
@@ -140,6 +139,8 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 
 		root.setBean(showcase);
 
+		setTitle("Showcase " + showcase.getWidgetClass().getSimpleName());
+
 		setShowcaseVisible(true);
 	}
 
@@ -151,6 +152,13 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	@Override
 	protected void preparePaintComponent(final Request request) {
 		super.preparePaintComponent(request);
+		if (!isInitialised()) {
+			Showcase showcase = picker.selectDefaultShowcase();
+			if (showcase != null) {
+				doShowItem(showcase);
+			}
+			setInitialised(true);
+		}
 		UIContext uic = UIContextHolder.getCurrent();
 		uic.getHeaders().addUniqueHeadLine("<script type='text/javascript' src='" + WebUtilities.
 				encode(javascript.getUrl()) + "'></script>");

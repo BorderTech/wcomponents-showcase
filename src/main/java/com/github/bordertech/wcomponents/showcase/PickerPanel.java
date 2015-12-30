@@ -36,13 +36,33 @@ public class PickerPanel extends WPanel {
 
 	}
 
-	public Showcase selectShowcase(final String widget) {
+	public Showcase selectDefaultShowcase() {
+		WSubMenu subMenu = null;
 		for (MenuItem item : menu.getMenuItems(true)) {
-			if (item instanceof WMenuItem) {
+			if (item instanceof WSubMenu) {
+				subMenu = (WSubMenu) item;
+			} else if (item instanceof WMenuItem) {
+				WMenuItem menuItem = (WMenuItem) item;
+				menu.setSelectedMenuItem(menuItem);
+				subMenu.setOpen(true);
+				Showcase showcase = (Showcase) menuItem.getActionObject();
+				return showcase;
+			}
+		}
+		return null;
+	}
+
+	public Showcase selectShowcaseByWidgetClass(final Class clazz) {
+		WSubMenu subMenu = null;
+		for (MenuItem item : menu.getMenuItems(true)) {
+			if (item instanceof WSubMenu) {
+				subMenu = (WSubMenu) item;
+			} else if (item instanceof WMenuItem) {
 				WMenuItem menuItem = (WMenuItem) item;
 				Showcase showcase = (Showcase) menuItem.getActionObject();
-				if (Util.equals(widget, showcase.getWidgetClass().getSimpleName())) {
+				if (Util.equals(clazz, showcase.getWidgetClass())) {
 					menu.setSelectedMenuItem(menuItem);
+					subMenu.setOpen(true);
 					return showcase;
 				}
 			}

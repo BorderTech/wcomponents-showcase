@@ -143,14 +143,14 @@ public class InfoPanel extends WPanel {
 
 		public RelatedButtonPanel() {
 			button.setRenderAsLink(true);
-			button.setBeanProperty(".");
+			button.setBeanProperty("simpleName");
 			add(button);
 			add(ajax);
 
 			button.setAction(new Action() {
 				@Override
 				public void execute(ActionEvent event) {
-					ShowcaseApp.getInstance(RelatedButtonPanel.this).doShowItem(getRelatedWidget());
+					ShowcaseApp.getInstance(RelatedButtonPanel.this).doShowItemByWidgetClass(getRelatedWidget());
 				}
 			});
 		}
@@ -159,8 +159,8 @@ public class InfoPanel extends WPanel {
 			ajax.addTargets(targets);
 		}
 
-		private String getRelatedWidget() {
-			return (String) getBean();
+		private Class getRelatedWidget() {
+			return (Class) getBean();
 		}
 
 	}

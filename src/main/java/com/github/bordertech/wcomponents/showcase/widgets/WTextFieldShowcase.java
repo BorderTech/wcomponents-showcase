@@ -7,6 +7,7 @@ import com.github.bordertech.wcomponents.WCheckBox;
 import com.github.bordertech.wcomponents.WContainer;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WPanel;
+import com.github.bordertech.wcomponents.WTextArea;
 import com.github.bordertech.wcomponents.WTextField;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 
-	private static final List<String> RELATED = Collections.unmodifiableList(Arrays.asList("WTextArea"));
+	private static final List<Class> RELATED = Collections.unmodifiableList(Arrays.asList((Class) WTextArea.class));
 
 	public WTextFieldShowcase() {
 		super(WTextField.class);
@@ -35,23 +36,23 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 	}
 
 	@Override
-	public String getPseudoCode() {
-		return "package my.sample;";
-	}
-
-	@Override
-	public List<String> getRelatedWidgets() {
+	public List<Class> getRelatedWidgets() {
 		return RELATED;
 	}
 
 	public static class WidgetPanel extends WPanel implements WidgetContainer<WTextField> {
 
-		private final WTextField widget = new WTextField();
+		private final WTextField widget;
 
 		public WidgetPanel() {
+
+			// SAMPLE-START
 			WFieldLayout layout = new WFieldLayout();
 			add(layout);
+
+			widget = new WTextField();
 			layout.addField("Textfield", widget);
+			// SAMPLE-FINISH
 		}
 
 		@Override

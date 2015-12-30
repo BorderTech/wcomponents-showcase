@@ -92,10 +92,41 @@ public final class SourceUtil {
 			return "";
 		}
 
-		String formattedSource = source.replace(' ', '\u00a0'); // nbsp
+		String formattedSource = source.replaceAll("\\t", "  ");
+		formattedSource = formattedSource.replace(' ', '\u00a0'); // nbsp
 		formattedSource = WebUtilities.encode(formattedSource); // escape content
 		formattedSource = formattedSource.replaceAll("\\r?\\n", "<br/>");
 		return formattedSource;
+	}
+
+	public static String getSampleSource(final String className) {
+
+		String source = getSource(className);
+
+		if (source == null) {
+			return "";
+		}
+
+		String[] lines = source.split("\\r?\\n");
+		StringBuffer sample = new StringBuffer();
+		boolean extract = false;
+		for (String line : lines) {
+			if (line.contains("SAMPLE-START")) {
+				extract = true;
+				sample.append("...\n");
+				continue;
+			} else if (line.contains("SAMPLE-FINISH")) {
+				extract = false;
+				continue;
+			}
+
+			if (extract) {
+				sample.append(line);
+				sample.append("\n");
+			}
+		}
+		sample.append("...\n");
+		return sample.toString();
 	}
 
 	/**

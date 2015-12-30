@@ -22,7 +22,7 @@ public abstract class AbstractShowcase<T extends WComponent> implements Showcase
 	}
 
 	@Override
-	public List<String> getRelatedWidgets() {
+	public List<Class> getRelatedWidgets() {
 		return Collections.EMPTY_LIST;
 	}
 

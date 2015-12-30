@@ -33,16 +33,6 @@ public class SourcePanel extends WPanel {
 	}
 
 	/**
-	 * Sets the source code to be displayed in the panel.
-	 *
-	 * @param sourceText the source code to display.
-	 */
-	public void setSource(final String sourceText) {
-		String formatted = SourceUtil.formatSource(sourceText);
-		source.setText(formatted);
-	}
-
-	/**
 	 * Override preparePaint in order to set up the resources on first access by a user.
 	 *
 	 * @param request the request being responded to.
@@ -52,8 +42,8 @@ public class SourcePanel extends WPanel {
 		super.preparePaintComponent(request);
 		if (!isInitialised()) {
 			Showcase item = getShowcase();
-			String formatted = SourceUtil.formatSource(item.getPseudoCode());
-			source.setText(formatted);
+			String rawSource = SourceUtil.getSampleSource(item.getClass().getName());
+			source.setText(SourceUtil.formatSource(rawSource));
 		}
 	}
 

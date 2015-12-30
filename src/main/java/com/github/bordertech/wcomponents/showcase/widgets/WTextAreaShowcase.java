@@ -8,6 +8,7 @@ import com.github.bordertech.wcomponents.WContainer;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WTextArea;
+import com.github.bordertech.wcomponents.WTextField;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 
-	private static final List<String> RELATED = Collections.unmodifiableList(Arrays.asList("WTextField"));
+	private static final List<Class> RELATED = Collections.unmodifiableList(Arrays.asList((Class) WTextField.class));
 
 	public WTextAreaShowcase() {
 		super(WTextArea.class);
@@ -35,23 +36,22 @@ public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 	}
 
 	@Override
-	public List<String> getRelatedWidgets() {
+	public List<Class> getRelatedWidgets() {
 		return RELATED;
-	}
-
-	@Override
-	public String getPseudoCode() {
-		return "package my.sample2;";
 	}
 
 	public static class WidgetPanel extends WPanel implements WidgetContainer<WTextArea> {
 
-		private final WTextArea widget = new WTextArea();
+		private final WTextArea widget;
 
 		public WidgetPanel() {
+			// SAMPLE-START
 			WFieldLayout layout = new WFieldLayout();
 			add(layout);
+
+			widget = new WTextArea()
 			layout.addField("Textarea", widget);
+			// SAMPLE-FINISH
 		}
 
 		@Override
