@@ -1,5 +1,8 @@
 package com.github.bordertech.wcomponents.showcase;
 
+import com.github.bordertech.wcomponents.Action;
+import com.github.bordertech.wcomponents.ActionEvent;
+import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.HeadingLevel;
 import com.github.bordertech.wcomponents.InternalResource;
 import com.github.bordertech.wcomponents.Margin;
@@ -8,7 +11,9 @@ import com.github.bordertech.wcomponents.MessageContainer;
 import com.github.bordertech.wcomponents.Request;
 import com.github.bordertech.wcomponents.UIContext;
 import com.github.bordertech.wcomponents.UIContextHolder;
+import com.github.bordertech.wcomponents.WAjaxControl;
 import com.github.bordertech.wcomponents.WApplication;
+import com.github.bordertech.wcomponents.WButton;
 import com.github.bordertech.wcomponents.WColumn;
 import com.github.bordertech.wcomponents.WComponent;
 import com.github.bordertech.wcomponents.WContent;
@@ -19,9 +24,7 @@ import com.github.bordertech.wcomponents.WRow;
 import com.github.bordertech.wcomponents.WTabSet;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.WebUtilities;
-import com.github.bordertech.wcomponents.showcase.widgets.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.widgets.Showcase;
-import com.github.bordertech.wcomponents.showcase.widgets.WidgetContainer;
+import com.github.bordertech.wcomponents.layout.FlowLayout;
 import com.github.bordertech.wcomponents.util.Config;
 import java.util.Date;
 
@@ -37,7 +40,8 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 
 	private final WPanel root = new WPanel();
 
-	private final WPanel demo = new WPanel();
+	private final WHeading sampleHeading = new WHeading(HeadingLevel.H2, "Sample");
+	private final WPanel sample = new WPanel();
 	private final PickerPanel picker = new PickerPanel(this);
 	private final WPanel properties = new WPanel();
 	private final InfoPanel info = new InfoPanel();
@@ -56,6 +60,9 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	 * Construct the controller.
 	 */
 	public ShowcaseApp() {
+
+		setTitle("WComponents showcase");
+
 		WPanel header = new WPanel(WPanel.Type.HEADER);
 		header.add(new WHeading(HeadingLevel.H1, "WComponents showcase"));
 		add(header);
@@ -66,43 +73,82 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		root.setSearchAncestors(false);
 		add(root);
 
-		WRow row = new WRow();
+		WRow row = new WRow(12);
 		root.add(row);
 
-		WColumn left = new WColumn(70);
-		WColumn right = new WColumn(30);
-		row.add(left);
-		row.add(right);
+		WColumn colPrev = new WColumn(10);
+		WColumn colSample = new WColumn(50);
+		WColumn colNext = new WColumn(10);
+		WColumn colConfig = new WColumn(30);
 
-		// Left
-		left.add(demo);
+		row.add(colPrev);
+		row.add(colSample);
+		row.add(colNext);
+		row.add(colConfig);
 
-		// Right
+		// Prev
+		WPanel prevPanel = new WPanel();
+		prevPanel.setLayout(new FlowLayout(FlowLayout.Alignment.LEFT));
+		colPrev.add(prevPanel);
+
+		WButton prevButton = new WButton("prev");
+		prevButton.setRenderAsLink(true);
+		prevButton.setImage("/images/ic_chevron_left_black_24dp.png");
+		prevButton.setToolTip("previous");
+		prevButton.setAction(new Action() {
+			@Override
+			public void execute(ActionEvent event) {
+				doPreviousShowcase();
+			}
+		});
+		prevPanel.add(prevButton);
+
+		// Next
+		WPanel nextPanel = new WPanel();
+		nextPanel.setLayout(new FlowLayout(FlowLayout.Alignment.RIGHT));
+		colNext.add(nextPanel);
+
+		WButton nextButton = new WButton("next");
+		nextButton.setRenderAsLink(true);
+		nextButton.setImage("/images/ic_chevron_right_black_24dp.png");
+		nextButton.setToolTip("next");
+		nextPanel.add(nextButton);
+		nextButton.setAction(new Action() {
+			@Override
+			public void execute(ActionEvent event) {
+				doNextShowcase();
+			}
+		});
+
+		// Sample
+		colSample.add(sample);
+		sample.add(sampleHeading);
+
+		// Config
 		WTabSet tabs = new WTabSet();
-		right.add(tabs);
+		colConfig.add(tabs);
 
-		WPanel holderProperties = new WPanel();
-		WPanel holderInfo = new WPanel();
-		WPanel holderSource = new WPanel();
-
-		holderProperties.add(properties);
-		holderInfo.add(info);
-		holderSource.add(source);
-
-		tabs.addTab(picker, "Showcases", WTabSet.TabMode.CLIENT);
-		tabs.addTab(holderProperties, "Properties", WTabSet.TabMode.CLIENT);
-		tabs.addTab(holderInfo, "Info", WTabSet.TabMode.CLIENT);
-		tabs.addTab(holderSource, "Source", WTabSet.TabMode.CLIENT);
+		tabs.addTab(picker, "Widgets", WTabSet.TabMode.CLIENT);
+		tabs.addTab(properties, "Properties", WTabSet.TabMode.CLIENT);
+		tabs.addTab(info, "Info", WTabSet.TabMode.CLIENT);
+		tabs.addTab(source, "Source", WTabSet.TabMode.CLIENT);
 
 		// Footer
 		WPanel footer = new WPanel(WPanel.Type.FOOTER);
 		footer.add(new WText(new Date().toString()));
 		add(footer);
 
-		picker.addAjaxTargets(left, holderProperties, holderInfo, holderSource);
-		info.addAjaxTargets(picker, left, holderProperties, holderInfo, holderSource);
+		// AJAX
+		WAjaxControl prevAjax = new WAjaxControl(prevButton);
+		WAjaxControl nextAjax = new WAjaxControl(nextButton);
+		add(prevAjax);
+		add(nextAjax);
 
-		setShowcaseVisible(false);
+		prevAjax.addTargets(new AjaxTarget[]{picker, colSample, properties, info, source});
+		nextAjax.addTargets(new AjaxTarget[]{picker, colSample, properties, info, source});
+		info.addAjaxTargets(picker, colSample, properties, info, source);
+
+		picker.addAjaxTargets(colSample, properties, info, source);
 
 		String version = Config.getInstance().getString("wcomponents-examples.version");
 		javascript.setCacheKey("wc.showcase.js." + version);
@@ -120,28 +166,42 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		return messages;
 	}
 
-	public void doShowItemByWidgetClass(final Class clazz) {
-		Showcase showcase = picker.selectShowcaseByWidgetClass(clazz);
+	public void doPreviousShowcase() {
+		Showcase showcase = picker.getPrevShowcase();
 		if (showcase != null) {
-			doShowItem(showcase);
+			doDisplayShowcase(showcase);
 		}
 	}
 
-	public void doShowItem(final Showcase showcase) {
+	public void doNextShowcase() {
+		Showcase showcase = picker.getNextShowcase();
+		if (showcase != null) {
+			doDisplayShowcase(showcase);
+		}
+
+	}
+
+	public void doDisplayShowcaseByWidgetClass(final Class clazz) {
+		Showcase showcase = picker.selectShowcaseByWidgetClass(clazz);
+		if (showcase != null) {
+			doDisplayShowcase(showcase);
+		}
+	}
+
+	public void doDisplayShowcase(final Showcase showcase) {
 
 		resetShowcase();
 
-		WidgetContainer widgetContainer = showcase.getWidgetContainerInstance();
-		demo.add(widgetContainer);
+		SampleContainer widgetContainer = showcase.getSampleContainerInstance();
+		sample.add(widgetContainer);
 
 		PropertyContainer propertyContainer = showcase.getPropertyContainerInstance(widgetContainer);
 		properties.add(propertyContainer);
 
 		root.setBean(showcase);
 
-		setTitle("Showcase " + showcase.getWidgetClass().getSimpleName());
+		sampleHeading.setText(showcase.getWidgetClass().getSimpleName());
 
-		setShowcaseVisible(true);
 	}
 
 	/**
@@ -155,7 +215,7 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		if (!isInitialised()) {
 			Showcase showcase = picker.selectDefaultShowcase();
 			if (showcase != null) {
-				doShowItem(showcase);
+				doDisplayShowcase(showcase);
 			}
 			setInitialised(true);
 		}
@@ -167,17 +227,10 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	}
 
 	private void resetShowcase() {
-		demo.reset();
+		sample.reset();
 		properties.reset();
 		info.reset();
 		source.reset();
-	}
-
-	private void setShowcaseVisible(final boolean visible) {
-		demo.setVisible(visible);
-		info.setVisible(visible);
-		source.setVisible(visible);
-		properties.setVisible(visible);
 	}
 
 	/**

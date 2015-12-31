@@ -1,5 +1,7 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
+import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.PropertyContainer;
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.WAjaxControl;
@@ -26,12 +28,12 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 	}
 
 	@Override
-	public WidgetContainer getWidgetContainerInstance() {
-		return new WidgetPanel();
+	public SampleContainer getSampleContainerInstance() {
+		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final WidgetContainer<WTextField> itemPanel) {
+	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WTextField> itemPanel) {
 		return new PropertiesPanel(itemPanel.getWidget());
 	}
 
@@ -40,14 +42,15 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 		return RELATED;
 	}
 
-	public static class WidgetPanel extends WPanel implements WidgetContainer<WTextField> {
+	public static class SamplePanel extends WPanel implements SampleContainer<WTextField> {
 
 		private final WTextField widget;
 
-		public WidgetPanel() {
+		public SamplePanel() {
 
 			// SAMPLE-START
 			WFieldLayout layout = new WFieldLayout();
+			layout.setLabelWidth(30);
 			add(layout);
 
 			widget = new WTextField();

@@ -1,6 +1,6 @@
 package com.github.bordertech.wcomponents.showcase.util;
 
-import com.github.bordertech.wcomponents.showcase.widgets.Showcase;
+import com.github.bordertech.wcomponents.showcase.Showcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WTextAreaShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WTextFieldShowcase;
 

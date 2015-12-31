@@ -6,7 +6,6 @@ import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.servlet.WebXmlRenderContext;
 import com.github.bordertech.wcomponents.showcase.util.SourceUtil;
-import com.github.bordertech.wcomponents.showcase.widgets.Showcase;
 import java.io.PrintWriter;
 
 /**

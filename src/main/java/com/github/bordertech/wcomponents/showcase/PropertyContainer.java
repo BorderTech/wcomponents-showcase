@@ -1,4 +1,4 @@
-package com.github.bordertech.wcomponents.showcase.widgets;
+package com.github.bordertech.wcomponents.showcase;
 
 import com.github.bordertech.wcomponents.Container;
 

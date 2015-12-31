@@ -14,7 +14,6 @@ import com.github.bordertech.wcomponents.WList;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.showcase.util.SourceUtil;
-import com.github.bordertech.wcomponents.showcase.widgets.Showcase;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ import java.util.List;
  */
 public class InfoPanel extends WPanel {
 
-	private final WText source = new WText();
+	private final WText txtInfo = new WText();
 
 	private final WList relatedShowcases = new WList(WList.Type.STACKED);
 	private final WList apiSuperLinks = new WList(WList.Type.STACKED);
@@ -37,8 +36,8 @@ public class InfoPanel extends WPanel {
 	public InfoPanel() {
 		setBeanProperty(".");
 
-		source.setEncodeText(false);
-		add(source);
+		txtInfo.setEncodeText(false);
+		add(txtInfo);
 		add(new WHeading(HeadingLevel.H2, "Related"));
 		add(relatedShowcases);
 		relatedShowcases.setRepeatedComponent(new RelatedButtonPanel());
@@ -71,7 +70,7 @@ public class InfoPanel extends WPanel {
 			// Javadoc for Info Text
 			String rawSource = SourceUtil.getSource(item.getWidgetClass().getName());
 			String info = SourceUtil.getJavaDoc(rawSource);
-			source.setText(info);
+			txtInfo.setText(info);
 			// API Links
 			setupApiLinks(item.getWidgetClass());
 			setInitialised(true);
@@ -150,7 +149,7 @@ public class InfoPanel extends WPanel {
 			button.setAction(new Action() {
 				@Override
 				public void execute(ActionEvent event) {
-					ShowcaseApp.getInstance(RelatedButtonPanel.this).doShowItemByWidgetClass(getRelatedWidget());
+					ShowcaseApp.getInstance(RelatedButtonPanel.this).doDisplayShowcaseByWidgetClass(getRelatedWidget());
 				}
 			});
 		}

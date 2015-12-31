@@ -11,8 +11,8 @@ import com.github.bordertech.wcomponents.WMenu;
 import com.github.bordertech.wcomponents.WMenuItem;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WSubMenu;
+import com.github.bordertech.wcomponents.WebUtilities;
 import com.github.bordertech.wcomponents.showcase.util.DataUtil;
-import com.github.bordertech.wcomponents.showcase.widgets.Showcase;
 import com.github.bordertech.wcomponents.util.Util;
 
 /**
@@ -52,6 +52,52 @@ public class PickerPanel extends WPanel {
 		return null;
 	}
 
+	public Showcase getNextShowcase() {
+		WMenuItem currentItem = (WMenuItem) menu.getSelectedMenuItem();
+		if (currentItem == null) {
+			return selectDefaultShowcase();
+		}
+
+		WSubMenu subMenu = getItemSubMenu(currentItem);
+
+		// Current position
+		int idx = subMenu.getMenuItems().indexOf(currentItem);
+		// Next Index
+		idx++;
+		// If end of Submenu go to beginning
+		if (idx == subMenu.getMenuItems().size()) {
+			idx = 0;
+		}
+		WMenuItem nextItem = (WMenuItem) subMenu.getMenuItems().get(idx);
+		Showcase nextShowcase = (Showcase) currentItem.getActionObject();
+
+		menu.setSelectedMenuItem(nextItem);
+		return nextShowcase;
+	}
+
+	public Showcase getPrevShowcase() {
+		WMenuItem currentItem = (WMenuItem) menu.getSelectedMenuItem();
+		if (currentItem == null) {
+			return selectDefaultShowcase();
+		}
+
+		WSubMenu subMenu = getItemSubMenu(currentItem);
+
+		// Current position
+		int idx = subMenu.getMenuItems().indexOf(currentItem);
+		// Prev Index
+		idx--;
+		// If start of Submenu go to end
+		if (idx < 0) {
+			idx = subMenu.getMenuItems().size() - 1;
+		}
+		WMenuItem prevItem = (WMenuItem) subMenu.getMenuItems().get(idx);
+		Showcase prevShowcase = (Showcase) currentItem.getActionObject();
+
+		menu.setSelectedMenuItem(prevItem);
+		return prevShowcase;
+	}
+
 	public Showcase selectShowcaseByWidgetClass(final Class clazz) {
 		WSubMenu subMenu = null;
 		for (MenuItem item : menu.getMenuItems(true)) {
@@ -68,6 +114,11 @@ public class PickerPanel extends WPanel {
 			}
 		}
 		return null;
+	}
+
+	private WSubMenu getItemSubMenu(final WMenuItem item) {
+		WSubMenu submenu = (WSubMenu) WebUtilities.getAncestorOfClass(WSubMenu.class, item);
+		return submenu;
 	}
 
 	/**
@@ -91,7 +142,7 @@ public class PickerPanel extends WPanel {
 				@Override
 				public void execute(final ActionEvent event) {
 					Showcase item = (Showcase) event.getActionObject();
-					ctrl.doShowItem(item);
+					ctrl.doDisplayShowcase(item);
 				}
 			});
 
@@ -102,7 +153,13 @@ public class PickerPanel extends WPanel {
 
 		for (MenuItem item : menu.getMenuItems(true)) {
 			if (item instanceof WMenuItem) {
-				WAjaxControl ajax = new WAjaxControl((WMenuItem) item, targets);
+				WAjaxControl ajax = new WAjaxControl((WMenuItem) item, targets) {
+					@Override
+					public boolean isVisible() {
+						WSubMenu submenu = getItemSubMenu((WMenuItem) getTrigger());
+						return submenu.isOpen();
+					}
+				};
 				ajaxContainer.add(ajax);
 			}
 		}
