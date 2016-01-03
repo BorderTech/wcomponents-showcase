@@ -32,7 +32,8 @@ public class PickerPanel extends WPanel {
 		add(menu);
 		add(ajaxContainer);
 
-		addExamples("UI", DataUtil.INPUT_EXAMPLES);
+		addExamples("Text input", DataUtil.INPUT_TEXT_EXAMPLES);
+		addExamples("Date input", DataUtil.INPUT_DATE_EXAMPLES);
 
 	}
 
