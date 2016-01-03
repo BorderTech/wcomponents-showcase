@@ -69,7 +69,7 @@ public class PickerPanel extends WPanel {
 			idx = 0;
 		}
 		WMenuItem nextItem = (WMenuItem) subMenu.getMenuItems().get(idx);
-		Showcase nextShowcase = (Showcase) currentItem.getActionObject();
+		Showcase nextShowcase = (Showcase) nextItem.getActionObject();
 
 		menu.setSelectedMenuItem(nextItem);
 		return nextShowcase;
@@ -92,7 +92,7 @@ public class PickerPanel extends WPanel {
 			idx = subMenu.getMenuItems().size() - 1;
 		}
 		WMenuItem prevItem = (WMenuItem) subMenu.getMenuItems().get(idx);
-		Showcase prevShowcase = (Showcase) currentItem.getActionObject();
+		Showcase prevShowcase = (Showcase) prevItem.getActionObject();
 
 		menu.setSelectedMenuItem(prevItem);
 		return prevShowcase;

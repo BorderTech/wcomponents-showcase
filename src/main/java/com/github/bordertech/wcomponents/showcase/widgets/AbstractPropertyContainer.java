@@ -3,7 +3,10 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
+import com.github.bordertech.wcomponents.AjaxTrigger;
+import com.github.bordertech.wcomponents.Input;
 import com.github.bordertech.wcomponents.MessageContainer;
+import com.github.bordertech.wcomponents.Request;
 import com.github.bordertech.wcomponents.WAjaxControl;
 import com.github.bordertech.wcomponents.WComponent;
 import com.github.bordertech.wcomponents.WContainer;
@@ -20,7 +23,12 @@ import com.github.bordertech.wcomponents.validation.ValidatingAction;
  */
 public abstract class AbstractPropertyContainer<T extends WComponent> extends WPanel implements PropertyContainer, MessageContainer {
 
-	private final WMessages messages = new WMessages();
+	private final WMessages messages = new WMessages() {
+		@Override
+		public boolean isHidden() {
+			return !hasMessages();
+		}
+	};
 
 	private final T widget;
 
@@ -30,6 +38,9 @@ public abstract class AbstractPropertyContainer<T extends WComponent> extends WP
 
 	private final WContainer ajaxContainer = new WContainer();
 
+	// Tooltip
+	private final WTextField txtTooltip = new WTextField();
+
 	public AbstractPropertyContainer(final T widget, final AjaxTarget target) {
 		this.widget = widget;
 		this.ajaxTarget = target;
@@ -38,30 +49,44 @@ public abstract class AbstractPropertyContainer<T extends WComponent> extends WP
 		add(fieldLayout);
 		add(ajaxContainer);
 
-		// IdName
-		final WTextField txtIdName = new WTextField();
-		txtIdName.setMaxLength(2);
-		fieldLayout.addField("Id name", txtIdName);
-		ajaxContainer.add(new WAjaxControl(txtIdName, new AjaxTarget[]{messages, target}));
-		txtIdName.setActionOnChange(new ValidatingAction(messages.getValidationErrors(), txtIdName) {
-			@Override
-			public void executeOnValid(final ActionEvent event) {
-				getWidget().setIdName(txtIdName.getValue());
-			}
-		});
-
 		// Tooltip
-		final WTextField txtTooltip = new WTextField();
-		fieldLayout.addField("Tooltip", txtTooltip);
-		ajaxContainer.add(new WAjaxControl(txtTooltip, target));
-		txtTooltip.setActionOnChange(new Action() {
-			@Override
-			public void execute(final ActionEvent event) {
-				getWidget().setToolTip(txtTooltip.getValue());
-			}
-		});
+		addPropertyWidget("Tooltip", txtTooltip);
 
+		// IdName - Not such a good idea to change IDs on the fly
 		//	TODO HtmlClass
+	}
+
+	protected void configWidgetProperties(final T widget) {
+		widget.setToolTip(txtTooltip.getValue());
+	}
+
+	@Override
+	protected void preparePaintComponent(final Request request) {
+		super.preparePaintComponent(request);
+		T widget = getWidget();
+		configWidgetProperties(widget);
+	}
+
+	protected void addPropertyWidget(final String label, final AjaxTrigger propertyTrigger) {
+
+		// Add to field layout
+		WFieldLayout layout = getFieldLayout();
+		layout.addField(label, propertyTrigger);
+
+		// Setup AJAX
+		WAjaxControl ajax = new WAjaxControl(propertyTrigger, getAjaxTarget());
+		ajax.addTarget(getMessages());
+		getAjaxContainer().add(ajax);
+
+		// Validation action
+		Action validation = new ValidatingAction(getMessages().getValidationErrors(), propertyTrigger) {
+			@Override
+			public void executeOnValid(ActionEvent event) {
+				T widget = getWidget();
+				configWidgetProperties(widget);
+			}
+		};
+		((Input) propertyTrigger).setActionOnChange(validation);
 	}
 
 	protected WFieldLayout getFieldLayout() {
@@ -84,5 +109,4 @@ public abstract class AbstractPropertyContainer<T extends WComponent> extends WP
 	public WMessages getMessages() {
 		return messages;
 	}
-
 }

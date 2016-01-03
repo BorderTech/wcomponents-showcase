@@ -1,11 +1,7 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
-import com.github.bordertech.wcomponents.Action;
-import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
-import com.github.bordertech.wcomponents.WAjaxControl;
 import com.github.bordertech.wcomponents.WCheckBox;
-import com.github.bordertech.wcomponents.WContainer;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WNumberField;
 import com.github.bordertech.wcomponents.WPanel;
@@ -13,7 +9,6 @@ import com.github.bordertech.wcomponents.WTextArea;
 import com.github.bordertech.wcomponents.WTextField;
 import com.github.bordertech.wcomponents.showcase.PropertyContainer;
 import com.github.bordertech.wcomponents.showcase.SampleContainer;
-import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -74,35 +69,26 @@ public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 
 	public static class PropertiesPanel extends WTextFieldShowcase.PropertiesPanel {
 
+		private final WNumberField numRows = new WNumberField();
+		private final WCheckBox chbRichText = new WCheckBox();
+
 		public PropertiesPanel(final WTextArea widget) {
 			super(widget);
 
-			WFieldLayout layout = getFieldLayout();
-			WContainer ajaxContainer = getAjaxContainer();
+			addPropertyWidget("Rows", numRows);
+			addPropertyWidget("Rich text", chbRichText);
+		}
 
-			// Rows
-			final WNumberField numRows = new WNumberField();
-			layout.addField("Rows", numRows);
-			ajaxContainer.add(new WAjaxControl(numRows, new AjaxTarget[]{getMessages(), widget}));
-			numRows.setActionOnChange(new ValidatingAction(getMessages().getValidationErrors(), numRows) {
-				@Override
-				public void executeOnValid(final ActionEvent event) {
-					int cols = numRows.getValue() == null ? 0 : numRows.getValue().intValue();
-					widget.setColumns(cols);
-				}
-			});
+		@Override
+		protected void configWidgetProperties(final WTextField widget) {
+			super.configWidgetProperties(widget);
 
-			// Rich Text
-			final WCheckBox chb = new WCheckBox();
-			layout.addField("Rich text", chb);
-			ajaxContainer.add(new WAjaxControl(chb, widget));
-			chb.setActionOnChange(new Action() {
-				@Override
-				public void execute(final ActionEvent event) {
-					widget.setRichTextArea(chb.isSelected());
-				}
-			});
+			WTextArea area = (WTextArea) widget;
 
+			int rows = numRows.getValue() == null ? 0 : numRows.getValue().intValue();
+			area.setRows(rows);
+
+			area.setRichTextArea(chbRichText.isSelected());
 		}
 
 	}
