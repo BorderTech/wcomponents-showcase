@@ -8,7 +8,7 @@ import com.github.bordertech.wcomponents.WCheckBox;
  *
  * @author jonathan
  */
-public abstract class AbstractInputPropertyContainer<T extends Input> extends AbstractPropertyContainer<T> {
+public abstract class AbstractInputPropertyContainer<T extends Input> extends AbstractTooltipPropertyContainer<T> {
 
 	private final WCheckBox chbReadonly = new WCheckBox();
 	private final WCheckBox chbDisabled = new WCheckBox();

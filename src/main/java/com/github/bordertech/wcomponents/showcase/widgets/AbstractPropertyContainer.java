@@ -45,9 +45,6 @@ public abstract class AbstractPropertyContainer<T extends WComponent> extends WP
 
 	private final WContainer ajaxContainer = new WContainer();
 
-	// Tooltip
-	private final WTextField txtTooltip = new WTextField();
-
 	public AbstractPropertyContainer(final T widget, final AjaxTarget target) {
 		this.widget = widget;
 		this.ajaxTarget = target;
@@ -55,23 +52,16 @@ public abstract class AbstractPropertyContainer<T extends WComponent> extends WP
 		add(messages);
 		add(fieldLayout);
 		add(ajaxContainer);
-
-		// Tooltip
-		addPropertyWidget("Tooltip", txtTooltip);
-
-		// IdName - Not such a good idea to change IDs on the fly
 		//	TODO HtmlClass
 	}
 
-	protected void configWidgetProperties(final T widget) {
-		widget.setToolTip(getPropertyStringValue(txtTooltip));
-	}
+	abstract protected void configWidgetProperties(final T widget);
 
 	@Override
 	protected void preparePaintComponent(final Request request) {
 		super.preparePaintComponent(request);
-		T widget = getWidget();
-		configWidgetProperties(widget);
+		T sampleWidget = getWidget();
+		configWidgetProperties(sampleWidget);
 	}
 
 	protected void addPropertyWidget(final String label, final AjaxTrigger propertyTrigger) {

@@ -5,6 +5,9 @@ import com.github.bordertech.wcomponents.showcase.widgets.WDateFieldShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WPartialDateFieldShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WTextAreaShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WTextFieldShowcase;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -16,19 +19,36 @@ public final class DataUtil {
 	}
 
 	/**
-	 * TEXT examples.
+	 * TEXT showcases.
 	 */
-	public static final Showcase[] INPUT_TEXT_EXAMPLES = new Showcase[]{
+	private static final Showcase[] INPUT_TEXT_SHOWCASES = new Showcase[]{
 		new WTextFieldShowcase(),
 		new WTextAreaShowcase()
 	};
 
 	/**
-	 * DATE examples.
+	 * DATE showcases.
 	 */
-	public static final Showcase[] INPUT_DATE_EXAMPLES = new Showcase[]{
+	private static final Showcase[] INPUT_DATE_SHOWCASES = new Showcase[]{
 		new WDateFieldShowcase(),
 		new WPartialDateFieldShowcase()
 	};
+
+	private static final Map<String, Showcase[]> SHOWCASES;
+
+	static {
+		Map<String, Showcase[]> map = new LinkedHashMap<>();
+		map.put("Text inputs", INPUT_TEXT_SHOWCASES);
+		map.put("Date inputs", INPUT_DATE_SHOWCASES);
+		SHOWCASES = Collections.unmodifiableMap(map);
+	}
+
+	/**
+	 *
+	 * @return the showcases.
+	 */
+	public static Map<String, Showcase[]> getShowcases() {
+		return SHOWCASES;
+	}
 
 }
