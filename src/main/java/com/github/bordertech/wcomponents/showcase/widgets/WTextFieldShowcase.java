@@ -13,6 +13,7 @@ import com.github.bordertech.wcomponents.WTextArea;
 import com.github.bordertech.wcomponents.WTextField;
 import com.github.bordertech.wcomponents.showcase.PropertyContainer;
 import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 import com.github.bordertech.wcomponents.validation.Diagnostic;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
@@ -144,10 +145,10 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 		@Override
 		protected void configWidgetProperties(final WTextField widget) {
 			super.configWidgetProperties(widget);
-			widget.setColumns(getPropertyIntValue(numCols));
-			widget.setMaxLength(getPropertyIntValue(numMaxLength));
-			widget.setMinLength(getPropertyIntValue(numMinLength));
-			widget.setPattern(getPropertyStringValue(txtPattern));
+			widget.setColumns(PropertyUtil.getPropertyIntValue(numCols));
+			widget.setMaxLength(PropertyUtil.getPropertyIntValue(numMaxLength));
+			widget.setMinLength(PropertyUtil.getPropertyIntValue(numMinLength));
+			widget.setPattern(PropertyUtil.getPropertyStringValue(txtPattern));
 		}
 
 	}

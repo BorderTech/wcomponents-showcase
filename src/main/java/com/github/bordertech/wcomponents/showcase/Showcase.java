@@ -2,7 +2,6 @@ package com.github.bordertech.wcomponents.showcase;
 
 import com.github.bordertech.wcomponents.showcase.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.WComponent;
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
  *
  * @author jonathan
  */
-public interface Showcase<T extends WComponent> extends Serializable {
+public interface Showcase<T> extends Serializable {
 
 	Class<T> getWidgetClass();
 

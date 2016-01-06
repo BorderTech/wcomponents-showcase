@@ -3,6 +3,7 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.WComponent;
 import com.github.bordertech.wcomponents.WTextField;
+import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 
 /**
  *
@@ -21,7 +22,7 @@ public abstract class AbstractTooltipPropertyContainer<T extends WComponent> ext
 	}
 
 	protected void configWidgetProperties(final T widget) {
-		widget.setToolTip(getPropertyStringValue(txtTooltip));
+		widget.setToolTip(PropertyUtil.getPropertyStringValue(txtTooltip));
 	}
 
 }

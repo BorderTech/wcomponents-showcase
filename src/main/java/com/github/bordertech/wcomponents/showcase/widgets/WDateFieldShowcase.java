@@ -12,6 +12,7 @@ import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WPartialDateField;
 import com.github.bordertech.wcomponents.showcase.PropertyContainer;
 import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
 import java.util.Collections;
@@ -119,8 +120,8 @@ public class WDateFieldShowcase extends AbstractShowcase<WDateField> {
 		@Override
 		protected void configWidgetProperties(final WDateField widget) {
 			super.configWidgetProperties(widget);
-			widget.setMinDate(getPropertyDateValue(minDate));
-			widget.setMaxDate(getPropertyDateValue(maxDate));
+			widget.setMinDate(PropertyUtil.getPropertyDateValue(minDate));
+			widget.setMaxDate(PropertyUtil.getPropertyDateValue(maxDate));
 		}
 
 	}

@@ -3,6 +3,7 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 import com.github.bordertech.wcomponents.AbstractWMultiSelectList;
 import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.WNumberField;
+import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 
 /**
  *
@@ -30,8 +31,8 @@ public abstract class AbstractMultiSelectPropertyContainer<T extends AbstractWMu
 	protected void configWidgetProperties(final T widget) {
 		super.configWidgetProperties(widget);
 
-		widget.setMinSelect(getPropertyIntValue(minSelect));
-		widget.setMaxSelect(getPropertyIntValue(maxSelect));
+		widget.setMinSelect(PropertyUtil.getPropertyIntValue(minSelect));
+		widget.setMaxSelect(PropertyUtil.getPropertyIntValue(maxSelect));
 	}
 
 }

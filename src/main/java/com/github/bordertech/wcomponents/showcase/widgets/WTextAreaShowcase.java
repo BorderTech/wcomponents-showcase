@@ -14,6 +14,7 @@ import com.github.bordertech.wcomponents.WTextArea;
 import com.github.bordertech.wcomponents.WTextField;
 import com.github.bordertech.wcomponents.showcase.PropertyContainer;
 import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
 import java.util.Collections;
@@ -126,7 +127,7 @@ public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 
 			WTextArea area = (WTextArea) widget;
 
-			area.setRows(getPropertyIntValue(numRows));
+			area.setRows(PropertyUtil.getPropertyIntValue(numRows));
 			area.setRichTextArea(chbRichText.isSelected());
 		}
 

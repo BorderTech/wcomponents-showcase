@@ -1,7 +1,6 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.showcase.Showcase;
-import com.github.bordertech.wcomponents.WComponent;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +8,7 @@ import java.util.List;
  *
  * @author jonathan
  */
-public abstract class AbstractShowcase<T extends WComponent> implements Showcase<T> {
+public abstract class AbstractShowcase<T> implements Showcase<T> {
 
 	private final Class<T> widget;
 

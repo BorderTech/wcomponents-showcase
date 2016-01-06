@@ -8,27 +8,18 @@ import com.github.bordertech.wcomponents.Input;
 import com.github.bordertech.wcomponents.MessageContainer;
 import com.github.bordertech.wcomponents.Request;
 import com.github.bordertech.wcomponents.WAjaxControl;
-import com.github.bordertech.wcomponents.WComponent;
 import com.github.bordertech.wcomponents.WContainer;
-import com.github.bordertech.wcomponents.WDateField;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WMessages;
-import com.github.bordertech.wcomponents.WNumberField;
 import com.github.bordertech.wcomponents.WPanel;
-import com.github.bordertech.wcomponents.WTextField;
 import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.validation.Diagnostic;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  *
  * @author jonathan
  */
-public abstract class AbstractPropertyContainer<T extends WComponent> extends WPanel implements PropertyContainer, MessageContainer {
+public abstract class AbstractPropertyContainer<T> extends WPanel implements PropertyContainer, MessageContainer {
 
 	private final WMessages messages = new WMessages() {
 		@Override
@@ -105,34 +96,6 @@ public abstract class AbstractPropertyContainer<T extends WComponent> extends WP
 	@Override
 	public WMessages getMessages() {
 		return messages;
-	}
-
-	protected String getPropertyStringValue(final WTextField textField) {
-		if (!isPropertyValid(textField)) {
-			return null;
-		}
-		return textField.getValue();
-	}
-
-	protected Date getPropertyDateValue(final WDateField dateField) {
-		if (!dateField.isParseable() || !isPropertyValid(dateField)) {
-			return null;
-		}
-		return dateField.getValue();
-	}
-
-	protected int getPropertyIntValue(final WNumberField numField) {
-		if (!isPropertyValid(numField)) {
-			return 0;
-		}
-		BigDecimal value = numField.getValue();
-		return value == null ? 0 : value.intValue();
-	}
-
-	protected boolean isPropertyValid(final Input propertyWidget) {
-		List<Diagnostic> diags = new ArrayList<>();
-		propertyWidget.validate(diags);
-		return diags.isEmpty();
 	}
 
 }

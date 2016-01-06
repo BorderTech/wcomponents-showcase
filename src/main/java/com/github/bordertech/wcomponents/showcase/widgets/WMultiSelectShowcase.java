@@ -15,6 +15,7 @@ import com.github.bordertech.wcomponents.WNumberField;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.showcase.PropertyContainer;
 import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
 import java.util.Collections;
@@ -133,7 +134,7 @@ public class WMultiSelectShowcase extends AbstractShowcase<WMultiSelect> {
 		@Override
 		protected void configWidgetProperties(final WMultiSelect widget) {
 			super.configWidgetProperties(widget);
-			widget.setRows(getPropertyIntValue(numRows));
+			widget.setRows(PropertyUtil.getPropertyIntValue(numRows));
 		}
 
 	}
