@@ -1,8 +1,8 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.AbstractWMultiSelectList;
-import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.WNumberField;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 
 /**
@@ -14,8 +14,8 @@ public abstract class AbstractMultiSelectPropertyContainer<T extends AbstractWMu
 	private final WNumberField minSelect = new WNumberField();
 	private final WNumberField maxSelect = new WNumberField();
 
-	public AbstractMultiSelectPropertyContainer(final T widget, final AjaxTarget target) {
-		super(widget, target);
+	public AbstractMultiSelectPropertyContainer(final SampleContainer<T> sampleContainer) {
+		super(sampleContainer);
 
 		minSelect.setMinValue(1);
 		maxSelect.setMinValue(1);

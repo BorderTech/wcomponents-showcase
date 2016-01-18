@@ -1,6 +1,6 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
-import com.github.bordertech.wcomponents.showcase.Showcase;
+import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import java.util.Collections;
 import java.util.List;
 

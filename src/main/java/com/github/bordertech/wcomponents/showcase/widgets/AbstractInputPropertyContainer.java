@@ -1,8 +1,8 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
-import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.Input;
 import com.github.bordertech.wcomponents.WCheckBox;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 
 /**
  *
@@ -14,8 +14,8 @@ public abstract class AbstractInputPropertyContainer<T extends Input> extends Ab
 	private final WCheckBox chbDisabled = new WCheckBox();
 	private final WCheckBox chbMandatory = new WCheckBox();
 
-	public AbstractInputPropertyContainer(final T widget, final AjaxTarget target) {
-		super(widget, target);
+	public AbstractInputPropertyContainer(final SampleContainer<T> sampleContainer) {
+		super(sampleContainer);
 
 		// Properties
 		addPropertyWidget("Readonly", chbReadonly);

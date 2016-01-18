@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.github.bordertech.wcomponents.showcase.widgets;
+package com.github.bordertech.wcomponents.showcase.common;
 
 import com.github.bordertech.wcomponents.Margin;
 import com.github.bordertech.wcomponents.Marginable;
@@ -34,6 +29,15 @@ public class MarginCheckboxSelect extends WCheckBoxSelect {
 		int west = locations.contains(LOCATION.WEST) ? 24 : 0;
 		Margin margin = new Margin(north, east, south, west);
 		widget.setMargin(margin);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDesc(final Object option, final int index) {
+		String desc = super.getDesc(option, index);
+		return desc.charAt(0) + desc.substring(1).replace('_', ' ').toLowerCase();
 	}
 
 }

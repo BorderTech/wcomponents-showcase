@@ -2,16 +2,14 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
-import com.github.bordertech.wcomponents.Margin;
 import com.github.bordertech.wcomponents.WButton;
 import com.github.bordertech.wcomponents.WDateField;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WLabel;
 import com.github.bordertech.wcomponents.WMessages;
-import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WPartialDateField;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,7 +34,7 @@ public class WPartialDateFieldShowcase extends AbstractShowcase<WPartialDateFiel
 
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WPartialDateField> itemPanel) {
-		return new PropertiesPanel(itemPanel.getWidget());
+		return new PropertiesPanel(itemPanel);
 	}
 
 	@Override
@@ -44,7 +42,7 @@ public class WPartialDateFieldShowcase extends AbstractShowcase<WPartialDateFiel
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<WPartialDateField> {
+	public static class SamplePanel extends AbstractInputSample<WPartialDateField> {
 
 		private final WPartialDateField widget;
 
@@ -88,8 +86,6 @@ public class WPartialDateFieldShowcase extends AbstractShowcase<WPartialDateFiel
 			widget.setDefaultSubmitButton(button);
 			// SAMPLE-FINISH
 
-			messages.setMargin(new Margin(0, 0, 12, 0));
-
 		}
 
 		@Override
@@ -102,12 +98,20 @@ public class WPartialDateFieldShowcase extends AbstractShowcase<WPartialDateFiel
 			return widget;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public WMessages getMessages() {
+			return messages;
+		}
+
 	}
 
 	public static class PropertiesPanel extends AbstractInputPropertyContainer<WPartialDateField> {
 
-		public PropertiesPanel(final WPartialDateField widget) {
-			super(widget, widget);
+		public PropertiesPanel(final SampleContainer<WPartialDateField> sampleContainer) {
+			super(sampleContainer);
 		}
 
 	}

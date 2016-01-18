@@ -1,5 +1,8 @@
 package com.github.bordertech.wcomponents.showcase;
 
+import com.github.bordertech.wcomponents.showcase.common.Showcase;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
@@ -16,6 +19,7 @@ import com.github.bordertech.wcomponents.WApplication;
 import com.github.bordertech.wcomponents.WButton;
 import com.github.bordertech.wcomponents.WColumn;
 import com.github.bordertech.wcomponents.WComponent;
+import com.github.bordertech.wcomponents.WContainer;
 import com.github.bordertech.wcomponents.WContent;
 import com.github.bordertech.wcomponents.WHeading;
 import com.github.bordertech.wcomponents.WMessages;
@@ -41,11 +45,15 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	private final WPanel root = new WPanel();
 
 	private final WHeading sampleHeading = new WHeading(HeadingLevel.H2, "Sample");
-	private final WPanel sample = new WPanel();
-	private final PickerPanel picker = new PickerPanel(this);
-	private final WPanel properties = new WPanel();
-	private final InfoPanel info = new InfoPanel();
-	private final SourcePanel source = new SourcePanel();
+	private final WPanel samplePanel = new WPanel();
+	private final PickerPanel pickerPanel = new PickerPanel(this);
+	private final WPanel propertiesPanel = new WPanel();
+	private final InfoPanel infoPanel = new InfoPanel();
+	private final SourcePanel sourcePanel = new SourcePanel();
+
+	private final WContainer sampleHolder = new WContainer();
+	private final WContainer propertiesHolder = new WContainer();
+
 	/**
 	 * Additional Javascript used to provide syntax-highlighting client-side.
 	 */
@@ -76,9 +84,9 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		WRow row = new WRow(12);
 		root.add(row);
 
-		WColumn colPrev = new WColumn(10);
-		WColumn colSample = new WColumn(50);
-		WColumn colNext = new WColumn(10);
+		WColumn colPrev = new WColumn(5);
+		WColumn colSample = new WColumn(60);
+		WColumn colNext = new WColumn(5);
 		WColumn colConfig = new WColumn(30);
 
 		row.add(colPrev);
@@ -86,52 +94,81 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		row.add(colNext);
 		row.add(colConfig);
 
-		// Prev
-		WPanel prevPanel = new WPanel();
-		prevPanel.setLayout(new FlowLayout(FlowLayout.Alignment.LEFT));
-		colPrev.add(prevPanel);
+		// Reset Button
+		WButton resetButton = new WButton("reset");
+		resetButton.setRenderAsLink(true);
+		resetButton.setImage("/images/ic_refresh_black_18dp.png");
+		resetButton.setToolTip("reset");
+		resetButton.setAction(new Action() {
+			@Override
+			public void execute(final ActionEvent event) {
+				doResetShowcase();
+			}
+		});
 
+		// Refresh Button
+		WButton refreshButton = new WButton("refresh");
+		refreshButton.setRenderAsLink(true);
+		refreshButton.setImage("/images/ic_sync_black_18dp.png");
+		refreshButton.setToolTip("refresh");
+
+		// Previous Button
 		WButton prevButton = new WButton("prev");
 		prevButton.setRenderAsLink(true);
-		prevButton.setImage("/images/ic_chevron_left_black_24dp.png");
+		prevButton.setImage("/images/ic_chevron_left_black_18dp.png");
 		prevButton.setToolTip("previous");
 		prevButton.setAction(new Action() {
 			@Override
-			public void execute(ActionEvent event) {
+			public void execute(final ActionEvent event) {
 				doPreviousShowcase();
 			}
 		});
-		prevPanel.add(prevButton);
 
-		// Next
-		WPanel nextPanel = new WPanel();
-		nextPanel.setLayout(new FlowLayout(FlowLayout.Alignment.RIGHT));
-		colNext.add(nextPanel);
-
+		// Next button
 		WButton nextButton = new WButton("next");
 		nextButton.setRenderAsLink(true);
-		nextButton.setImage("/images/ic_chevron_right_black_24dp.png");
+		nextButton.setImage("/images/ic_chevron_right_black_18dp.png");
 		nextButton.setToolTip("next");
-		nextPanel.add(nextButton);
 		nextButton.setAction(new Action() {
 			@Override
-			public void execute(ActionEvent event) {
+			public void execute(final ActionEvent event) {
 				doNextShowcase();
 			}
 		});
 
+		// Prev
+		colPrev.setAlignment(WColumn.Alignment.CENTER);
+		colPrev.add(prevButton);
+
+		// Next
+		colNext.setAlignment(WColumn.Alignment.CENTER);
+		colNext.add(nextButton);
+
 		// Sample
-		colSample.add(sample);
-		sample.add(sampleHeading);
+		colSample.add(samplePanel);
+		samplePanel.add(sampleHeading);
+		samplePanel.add(sampleHolder);
+
+		sampleHeading.setMargin(new Margin(0, 0, 12, 0));
+
+		// Button Panel
+		WPanel buttonPanel = new WPanel();
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.Alignment.CENTER, 6, 0));
+		buttonPanel.setMargin(new Margin(36, 0, 12, 0));
+		buttonPanel.add(refreshButton);
+		buttonPanel.add(resetButton);
+		colSample.add(buttonPanel);
 
 		// Config
 		WTabSet tabs = new WTabSet();
 		colConfig.add(tabs);
 
-		tabs.addTab(picker, "Widgets", WTabSet.TabMode.CLIENT);
-		tabs.addTab(properties, "Properties", WTabSet.TabMode.CLIENT);
-		tabs.addTab(info, "Info", WTabSet.TabMode.CLIENT);
-		tabs.addTab(source, "Source", WTabSet.TabMode.CLIENT);
+		tabs.addTab(pickerPanel, "Widgets", WTabSet.TabMode.CLIENT);
+		tabs.addTab(propertiesPanel, "Properties", WTabSet.TabMode.CLIENT);
+		tabs.addTab(infoPanel, "Info", WTabSet.TabMode.CLIENT);
+		tabs.addTab(sourcePanel, "Source", WTabSet.TabMode.CLIENT);
+
+		propertiesPanel.add(propertiesHolder);
 
 		// Footer
 		WPanel footer = new WPanel(WPanel.Type.FOOTER);
@@ -144,11 +181,11 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		add(prevAjax);
 		add(nextAjax);
 
-		prevAjax.addTargets(new AjaxTarget[]{picker, colSample, properties, info, source});
-		nextAjax.addTargets(new AjaxTarget[]{picker, colSample, properties, info, source});
-		info.addAjaxTargets(picker, colSample, properties, info, source);
+		prevAjax.addTargets(new AjaxTarget[]{pickerPanel, samplePanel, propertiesPanel, infoPanel, sourcePanel});
+		nextAjax.addTargets(new AjaxTarget[]{pickerPanel, samplePanel, propertiesPanel, infoPanel, sourcePanel});
+		infoPanel.addAjaxTargets(pickerPanel, samplePanel, propertiesPanel, infoPanel, sourcePanel);
 
-		picker.addAjaxTargets(colSample, properties, info, source);
+		pickerPanel.addAjaxTargets(samplePanel, propertiesPanel, infoPanel, sourcePanel);
 
 		String version = Config.getInstance().getString("wcomponents-examples.version");
 		javascript.setCacheKey("wc.showcase.js." + version);
@@ -167,14 +204,14 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	}
 
 	public void doPreviousShowcase() {
-		Showcase showcase = picker.getPrevShowcase();
+		Showcase showcase = pickerPanel.getPrevShowcase();
 		if (showcase != null) {
 			doDisplayShowcase(showcase);
 		}
 	}
 
 	public void doNextShowcase() {
-		Showcase showcase = picker.getNextShowcase();
+		Showcase showcase = pickerPanel.getNextShowcase();
 		if (showcase != null) {
 			doDisplayShowcase(showcase);
 		}
@@ -182,21 +219,39 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	}
 
 	public void doDisplayShowcaseByWidgetClass(final Class clazz) {
-		Showcase showcase = picker.selectShowcaseByWidgetClass(clazz);
+		Showcase showcase = pickerPanel.selectShowcaseByWidgetClass(clazz);
 		if (showcase != null) {
 			doDisplayShowcase(showcase);
 		}
 	}
 
+	public void doConfigWidget() {
+		PropertyContainer prop = getPropertyContainer();
+		if (prop != null) {
+			prop.configWidget();
+		}
+	}
+
+	public void doResetShowcase() {
+		SampleContainer sample = getSampleContainer();
+		if (sample != null) {
+			sample.reset();
+		}
+		PropertyContainer prop = getPropertyContainer();
+		if (prop != null) {
+			prop.reset();
+		}
+	}
+
 	public void doDisplayShowcase(final Showcase showcase) {
 
-		resetShowcase();
+		removeShowcase();
 
 		SampleContainer widgetContainer = showcase.getSampleContainerInstance();
-		sample.add(widgetContainer);
+		sampleHolder.add(widgetContainer);
 
 		PropertyContainer propertyContainer = showcase.getPropertyContainerInstance(widgetContainer);
-		properties.add(propertyContainer);
+		propertiesHolder.add(propertyContainer);
 
 		root.setBean(showcase);
 
@@ -213,7 +268,7 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	protected void preparePaintComponent(final Request request) {
 		super.preparePaintComponent(request);
 		if (!isInitialised()) {
-			Showcase showcase = picker.selectDefaultShowcase();
+			Showcase showcase = pickerPanel.selectDefaultShowcase();
 			if (showcase != null) {
 				doDisplayShowcase(showcase);
 			}
@@ -226,11 +281,25 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 				"<link type='text/css' rel='stylesheet' href='" + WebUtilities.encode(css.getUrl()) + "'></link>");
 	}
 
-	private void resetShowcase() {
-		sample.reset();
-		properties.reset();
-		info.reset();
-		source.reset();
+	private void removeShowcase() {
+		samplePanel.reset();
+		propertiesPanel.reset();
+		infoPanel.reset();
+		sourcePanel.reset();
+	}
+
+	private SampleContainer getSampleContainer() {
+		if (sampleHolder.getChildCount() > 0) {
+			return (SampleContainer) sampleHolder.getChildAt(0);
+		}
+		return null;
+	}
+
+	private PropertyContainer getPropertyContainer() {
+		if (propertiesHolder.getChildCount() > 0) {
+			return (PropertyContainer) propertiesHolder.getChildAt(0);
+		}
+		return null;
 	}
 
 	/**

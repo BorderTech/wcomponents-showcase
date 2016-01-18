@@ -1,5 +1,6 @@
 package com.github.bordertech.wcomponents.showcase;
 
+import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.RenderContext;
 import com.github.bordertech.wcomponents.Request;
 import com.github.bordertech.wcomponents.WPanel;

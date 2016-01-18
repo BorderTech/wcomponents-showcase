@@ -3,7 +3,6 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
-import com.github.bordertech.wcomponents.Margin;
 import com.github.bordertech.wcomponents.WAjaxControl;
 import com.github.bordertech.wcomponents.WButton;
 import com.github.bordertech.wcomponents.WDropdown;
@@ -12,9 +11,8 @@ import com.github.bordertech.wcomponents.WLabel;
 import com.github.bordertech.wcomponents.WMessages;
 import com.github.bordertech.wcomponents.WMultiSelect;
 import com.github.bordertech.wcomponents.WNumberField;
-import com.github.bordertech.wcomponents.WPanel;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
@@ -40,7 +38,7 @@ public class WDropdownShowcase extends AbstractShowcase<WDropdown> {
 
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WDropdown> itemPanel) {
-		return new PropertiesPanel(itemPanel.getWidget());
+		return new PropertiesPanel(itemPanel);
 	}
 
 	@Override
@@ -48,7 +46,7 @@ public class WDropdownShowcase extends AbstractShowcase<WDropdown> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<WDropdown> {
+	public static class SamplePanel extends AbstractInputSample<WDropdown> {
 
 		private final WDropdown widget;
 
@@ -105,8 +103,6 @@ public class WDropdownShowcase extends AbstractShowcase<WDropdown> {
 			widget.setDefaultSubmitButton(button);
 			// SAMPLE-FINISH
 
-			messages.setMargin(new Margin(0, 0, 12, 0));
-
 		}
 
 		@Override
@@ -119,14 +115,22 @@ public class WDropdownShowcase extends AbstractShowcase<WDropdown> {
 			return widget;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public WMessages getMessages() {
+			return messages;
+		}
+
 	}
 
 	public static class PropertiesPanel extends AbstractInputPropertyContainer<WDropdown> {
 
 		private final WNumberField numOptionWidth = new WNumberField();
 
-		public PropertiesPanel(final WDropdown widget) {
-			super(widget, widget);
+		public PropertiesPanel(final SampleContainer<WDropdown> sampleContainer) {
+			super(sampleContainer);
 
 			numOptionWidth.setMinValue(1);
 			numOptionWidth.setMaxValue(100);

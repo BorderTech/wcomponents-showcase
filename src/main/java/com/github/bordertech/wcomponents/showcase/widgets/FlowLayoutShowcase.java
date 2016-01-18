@@ -1,14 +1,13 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.AjaxTarget;
-import com.github.bordertech.wcomponents.WDropdown;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WPartialDateField;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.layout.FlowLayout;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
-import java.util.ArrayList;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.TypeWDropdown;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +32,7 @@ public class FlowLayoutShowcase extends AbstractShowcase<FlowLayout> {
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<FlowLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
-		return new PropertiesPanel(sample.getPanel());
+		return new PropertiesPanel(itemPanel, sample.getPanel());
 	}
 
 	@Override
@@ -41,18 +40,15 @@ public class FlowLayoutShowcase extends AbstractShowcase<FlowLayout> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<FlowLayout> {
+	public static class SamplePanel extends AbstractLayoutSample<FlowLayout> {
 
 		private final WPanel panel;
 
 		public SamplePanel() {
 
-			WPanel box = new WPanel(Type.FEATURE);
-			add(box);
-
 			// SAMPLE-START
 			panel = new WPanel();
-			panel.setLayout(new FlowLayout(FlowLayout.Alignment.LEFT, 6, 6));
+			panel.setLayout(new FlowLayout(FlowLayout.Alignment.LEFT));
 			for (int i = 1; i < 4; i++) {
 				WPanel child = new WPanel(Type.BOX);
 				child.add(new WText("Child " + i));
@@ -60,7 +56,7 @@ public class FlowLayoutShowcase extends AbstractShowcase<FlowLayout> {
 			}
 			// SAMPLE-FINISH
 
-			box.add(panel);
+			add(panel);
 		}
 
 		@Override
@@ -80,17 +76,13 @@ public class FlowLayoutShowcase extends AbstractShowcase<FlowLayout> {
 
 	public static class PropertiesPanel extends AbstractLayoutPropertyContainer<FlowLayout> {
 
-		private final WDropdown drpAlignment = new WDropdown(FlowLayout.Alignment.values());
-		private final WDropdown drpContentAlignment = new WDropdown();
+		private final TypeWDropdown<FlowLayout.Alignment> drpAlignment = new TypeWDropdown<>(FlowLayout.Alignment.values());
+		private final TypeWDropdown<FlowLayout.ContentAlignment> drpContentAlignment = new TypeWDropdown<>(FlowLayout.ContentAlignment.values());
 
-		public PropertiesPanel(final WPanel panel) {
-			super(panel);
+		public PropertiesPanel(final SampleContainer<FlowLayout> sampleContainer, final WPanel panel) {
+			super(sampleContainer, panel);
 
 			drpAlignment.setSelected(FlowLayout.Alignment.LEFT);
-
-			List<FlowLayout.ContentAlignment> alignments = new ArrayList<>(Arrays.asList(FlowLayout.ContentAlignment.values()));
-			alignments.add(0, null);
-			drpContentAlignment.setOptions(alignments);
 			drpContentAlignment.setSelected(FlowLayout.ContentAlignment.MIDDLE);
 
 			addPropertyWidget("Alignment", drpAlignment);
@@ -102,10 +94,8 @@ public class FlowLayoutShowcase extends AbstractShowcase<FlowLayout> {
 			super.configWidgetProperties(widget);
 			int hgap = getHGap();
 			int vgap = getVGap();
-			FlowLayout.Alignment alignment = (FlowLayout.Alignment) drpAlignment.getSelected();
-			FlowLayout.ContentAlignment contentAlignment = (FlowLayout.ContentAlignment) drpContentAlignment.getSelected();
 
-			FlowLayout layout = new FlowLayout(alignment, hgap, vgap, contentAlignment);
+			FlowLayout layout = new FlowLayout(drpAlignment.getSelected(), hgap, vgap, drpContentAlignment.getSelected());
 			getPanel().setLayout(layout);
 		}
 

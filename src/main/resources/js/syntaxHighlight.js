@@ -30,6 +30,7 @@
 				
 			if(container)
 			{
+				highlightedSource = [];
 				container = container.firstChild;
 				
 				lines = container.innerHTML.replace(/<br[^>]*>/ig, "\n").replace(/&nbsp;/g, ' ').split("\n");

@@ -1,6 +1,6 @@
 package com.github.bordertech.wcomponents.showcase.util;
 
-import com.github.bordertech.wcomponents.showcase.Showcase;
+import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.showcase.widgets.BorderLayoutShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.ColumnLayoutShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.FlowLayoutShowcase;
@@ -11,6 +11,7 @@ import com.github.bordertech.wcomponents.showcase.widgets.WDropdownShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WMultiSelectShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WPanelShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WPartialDateFieldShowcase;
+import com.github.bordertech.wcomponents.showcase.widgets.WTableShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WTextAreaShowcase;
 import com.github.bordertech.wcomponents.showcase.widgets.WTextFieldShowcase;
 import java.util.Collections;
@@ -21,9 +22,9 @@ import java.util.Map;
  *
  * @author jonathan
  */
-public final class DataUtil {
+public final class ConfigUtil {
 
-	private DataUtil() {
+	private ConfigUtil() {
 	}
 
 	/**
@@ -54,12 +55,13 @@ public final class DataUtil {
 	 * SELECT showcases.
 	 */
 	private static final Showcase[] LAYOUT_SHOWCASES = new Showcase[]{
-		new WPanelShowcase(),
 		new GridLayoutShowcase(),
 		new BorderLayoutShowcase(),
 		new ColumnLayoutShowcase(),
 		new FlowLayoutShowcase(),
-		new ListLayoutShowcase()
+		new ListLayoutShowcase(),
+		new WPanelShowcase(),
+		new WTableShowcase()
 	};
 
 	private static final Map<String, Showcase[]> SHOWCASES;

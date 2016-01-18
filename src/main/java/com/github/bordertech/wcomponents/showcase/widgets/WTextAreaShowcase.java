@@ -2,18 +2,16 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
-import com.github.bordertech.wcomponents.Margin;
 import com.github.bordertech.wcomponents.WButton;
 import com.github.bordertech.wcomponents.WCheckBox;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WLabel;
 import com.github.bordertech.wcomponents.WMessages;
 import com.github.bordertech.wcomponents.WNumberField;
-import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WTextArea;
 import com.github.bordertech.wcomponents.WTextField;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
@@ -39,7 +37,7 @@ public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WTextArea> itemPanel) {
-		return new PropertiesPanel(itemPanel.getWidget());
+		return new PropertiesPanel(itemPanel);
 	}
 
 	@Override
@@ -47,7 +45,7 @@ public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<WTextArea> {
+	public static class SamplePanel extends AbstractInputSample<WTextArea> {
 
 		private final WTextArea widget;
 
@@ -91,8 +89,6 @@ public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 			widget.setDefaultSubmitButton(button);
 			// SAMPLE-FINISH
 
-			messages.setMargin(new Margin(0, 0, 12, 0));
-
 		}
 
 		@Override
@@ -105,15 +101,23 @@ public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 			return widget;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public WMessages getMessages() {
+			return messages;
+		}
+
 	}
 
-	public static class PropertiesPanel extends WTextFieldShowcase.PropertiesPanel {
+	public static class PropertiesPanel extends WTextFieldShowcase.PropertiesPanel<WTextArea> {
 
 		private final WNumberField numRows = new WNumberField();
 		private final WCheckBox chbRichText = new WCheckBox();
 
-		public PropertiesPanel(final WTextArea widget) {
-			super(widget);
+		public PropertiesPanel(final SampleContainer<WTextArea> sampleContainer) {
+			super(sampleContainer);
 
 			numRows.setMinValue(1);
 
@@ -122,13 +126,11 @@ public class WTextAreaShowcase extends AbstractShowcase<WTextArea> {
 		}
 
 		@Override
-		protected void configWidgetProperties(final WTextField widget) {
+		protected void configWidgetProperties(final WTextArea widget) {
 			super.configWidgetProperties(widget);
 
-			WTextArea area = (WTextArea) widget;
-
-			area.setRows(PropertyUtil.getPropertyIntValue(numRows));
-			area.setRichTextArea(chbRichText.isSelected());
+			widget.setRows(PropertyUtil.getPropertyIntValue(numRows));
+			widget.setRichTextArea(chbRichText.isSelected());
 		}
 
 	}

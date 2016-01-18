@@ -1,10 +1,11 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
+import com.github.bordertech.wcomponents.WCheckBox;
 import com.github.bordertech.wcomponents.WCheckBoxSelect;
-import com.github.bordertech.wcomponents.WNumberField;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.layout.LayoutManager;
-import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
+import com.github.bordertech.wcomponents.showcase.common.MarginCheckboxSelect;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 
 /**
  *
@@ -12,24 +13,19 @@ import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
  */
 public abstract class AbstractLayoutPropertyContainer<T extends LayoutManager> extends AbstractPropertyContainer<T> {
 
+	private static final int DEFAULT_HGAP = 12;
+	private static final int DEFAULT_VGAP = 6;
+
 	private final WCheckBoxSelect cbsMargin = new MarginCheckboxSelect();
-	private final WNumberField numHGap = new WNumberField();
-	private final WNumberField numVGap = new WNumberField();
+	private final WCheckBox chbSpacing = new WCheckBox();
 	private final WPanel panel;
 
-	public AbstractLayoutPropertyContainer(final WPanel panel) {
-		super(null, panel);
+	public AbstractLayoutPropertyContainer(final SampleContainer<T> sampleContainer, final WPanel panel) {
+		super(sampleContainer);
 		this.panel = panel;
 
-		numHGap.setMinValue(0);
-		numVGap.setMinValue(0);
-
-		numHGap.setNumber(6);
-		numVGap.setNumber(6);
-
 		addPropertyWidget("Margin", cbsMargin);
-		addPropertyWidget("Horizontal gap", numHGap);
-		addPropertyWidget("Vertical gap", numVGap);
+		addPropertyWidget("Spacing", chbSpacing);
 	}
 
 	@Override
@@ -41,12 +37,16 @@ public abstract class AbstractLayoutPropertyContainer<T extends LayoutManager> e
 		return panel;
 	}
 
+	protected boolean isUseSpacing() {
+		return chbSpacing.isSelected();
+	}
+
 	protected int getHGap() {
-		return PropertyUtil.getPropertyIntValue(numHGap);
+		return isUseSpacing() ? DEFAULT_HGAP : 0;
 	}
 
 	protected int getVGap() {
-		return PropertyUtil.getPropertyIntValue(numVGap);
+		return isUseSpacing() ? DEFAULT_VGAP : 0;
 	}
 
 	@Override

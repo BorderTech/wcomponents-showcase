@@ -6,13 +6,14 @@ import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.AjaxTrigger;
 import com.github.bordertech.wcomponents.Input;
 import com.github.bordertech.wcomponents.MessageContainer;
-import com.github.bordertech.wcomponents.Request;
 import com.github.bordertech.wcomponents.WAjaxControl;
 import com.github.bordertech.wcomponents.WContainer;
+import com.github.bordertech.wcomponents.WField;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WMessages;
 import com.github.bordertech.wcomponents.WPanel;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 
 /**
@@ -28,17 +29,14 @@ public abstract class AbstractPropertyContainer<T> extends WPanel implements Pro
 		}
 	};
 
-	private final T widget;
-
-	private final AjaxTarget ajaxTarget;
+	private final SampleContainer<T> sampleContainer;
 
 	private final WFieldLayout fieldLayout = new WFieldLayout();
 
 	private final WContainer ajaxContainer = new WContainer();
 
-	public AbstractPropertyContainer(final T widget, final AjaxTarget target) {
-		this.widget = widget;
-		this.ajaxTarget = target;
+	public AbstractPropertyContainer(final SampleContainer<T> sampleContainer) {
+		this.sampleContainer = sampleContainer;
 
 		add(messages);
 		add(fieldLayout);
@@ -46,20 +44,25 @@ public abstract class AbstractPropertyContainer<T> extends WPanel implements Pro
 		//	TODO HtmlClass
 	}
 
-	abstract protected void configWidgetProperties(final T widget);
+	@Override
+	public SampleContainer getSampleContainer() {
+		return sampleContainer;
+	}
 
 	@Override
-	protected void preparePaintComponent(final Request request) {
-		super.preparePaintComponent(request);
+	public void configWidget() {
 		T sampleWidget = getWidget();
 		configWidgetProperties(sampleWidget);
 	}
 
-	protected void addPropertyWidget(final String label, final AjaxTrigger propertyTrigger) {
+	abstract protected void configWidgetProperties(final T widget);
+
+	protected WField addPropertyWidget(final String label, final AjaxTrigger propertyTrigger) {
 
 		// Add to field layout
 		WFieldLayout layout = getFieldLayout();
-		layout.addField(label, propertyTrigger);
+		WField field = layout.addField(label, propertyTrigger);
+		field.setInputWidth(100);
 
 		// Setup AJAX
 		WAjaxControl ajax = new WAjaxControl(propertyTrigger, getAjaxTarget());
@@ -69,12 +72,13 @@ public abstract class AbstractPropertyContainer<T> extends WPanel implements Pro
 		// Validation action
 		Action validation = new ValidatingAction(getMessages().getValidationErrors(), propertyTrigger) {
 			@Override
-			public void executeOnValid(ActionEvent event) {
-				T widget = getWidget();
-				configWidgetProperties(widget);
+			public void executeOnValid(final ActionEvent event) {
+				configWidget();
 			}
 		};
 		((Input) propertyTrigger).setActionOnChange(validation);
+
+		return field;
 	}
 
 	protected WFieldLayout getFieldLayout() {
@@ -86,11 +90,11 @@ public abstract class AbstractPropertyContainer<T> extends WPanel implements Pro
 	}
 
 	protected T getWidget() {
-		return widget;
+		return sampleContainer.getWidget();
 	}
 
 	protected AjaxTarget getAjaxTarget() {
-		return ajaxTarget;
+		return sampleContainer.getAjaxTarget();
 	}
 
 	@Override

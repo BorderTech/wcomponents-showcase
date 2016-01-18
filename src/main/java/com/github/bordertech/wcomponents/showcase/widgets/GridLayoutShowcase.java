@@ -7,9 +7,10 @@ import com.github.bordertech.wcomponents.WPartialDateField;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.layout.FlowLayout;
 import com.github.bordertech.wcomponents.layout.GridLayout;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
+import com.github.bordertech.wcomponents.validation.Diagnostic;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +35,7 @@ public class GridLayoutShowcase extends AbstractShowcase<GridLayout> {
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<GridLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
-		return new PropertiesPanel(sample.getPanel());
+		return new PropertiesPanel(itemPanel, sample.getPanel());
 	}
 
 	@Override
@@ -42,18 +43,15 @@ public class GridLayoutShowcase extends AbstractShowcase<GridLayout> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<GridLayout> {
+	public static class SamplePanel extends AbstractLayoutSample<GridLayout> {
 
 		private final WPanel panel;
 
 		public SamplePanel() {
 
-			WPanel box = new WPanel(Type.FEATURE);
-			add(box);
-
 			// SAMPLE-START
 			panel = new WPanel();
-			panel.setLayout(new GridLayout(0, 3, 6, 6));
+			panel.setLayout(new GridLayout(0, 3));
 			for (int i = 1; i < 10; i++) {
 				WPanel child = new WPanel(Type.BOX);
 				child.setLayout(new FlowLayout(FlowLayout.Alignment.CENTER));
@@ -62,7 +60,7 @@ public class GridLayoutShowcase extends AbstractShowcase<GridLayout> {
 			}
 			// SAMPLE-FINISH
 
-			box.add(panel);
+			add(panel);
 		}
 
 		@Override
@@ -82,14 +80,35 @@ public class GridLayoutShowcase extends AbstractShowcase<GridLayout> {
 
 	public static class PropertiesPanel extends AbstractLayoutPropertyContainer<GridLayout> {
 
-		private final WNumberField numCols = new WNumberField();
-		private final WNumberField numRows = new WNumberField();
+		private final WNumberField numCols = new WNumberField() {
+			@Override
+			public void validate(final List<Diagnostic> diags) {
+				super.validate(diags);
+				if (diags.isEmpty()) {
+					if (numCols.getValue() == null && numRows.getValue() == null) {
+						diags.add(createErrorDiagnostic("At least a row or col must be provided."));
+					}
+				}
+			}
 
-		public PropertiesPanel(final WPanel panel) {
-			super(panel);
-			numCols.setMinValue(0);
+		};
+		private final WNumberField numRows = new WNumberField() {
+			@Override
+			public void validate(final List<Diagnostic> diags) {
+				super.validate(diags);
+				if (diags.isEmpty()) {
+					if (numCols.getValue() == null && numRows.getValue() == null) {
+						diags.add(createErrorDiagnostic("At least a row or col must be provided."));
+					}
+				}
+			}
+		};
+
+		public PropertiesPanel(final SampleContainer<GridLayout> sampleContainer, final WPanel panel) {
+			super(sampleContainer, panel);
+			numCols.setMinValue(1);
 			numCols.setNumber(3);
-			numRows.setMinValue(0);
+			numRows.setMinValue(1);
 
 			addPropertyWidget("Cols", numCols);
 			addPropertyWidget("Rows", numRows);
@@ -98,12 +117,14 @@ public class GridLayoutShowcase extends AbstractShowcase<GridLayout> {
 		@Override
 		protected void configWidgetProperties(final GridLayout widget) {
 			super.configWidgetProperties(widget);
-			int rows = PropertyUtil.getPropertyIntValue(numRows);
-			int cols = PropertyUtil.getPropertyIntValue(numCols);
-			int hgap = getHGap();
-			int vgap = getVGap();
-			GridLayout layout = new GridLayout(rows, cols, hgap, vgap);
-			getPanel().setLayout(layout);
+			if (PropertyUtil.isPropertyValid(numRows) && PropertyUtil.isPropertyValid(numCols)) {
+				int rows = PropertyUtil.getPropertyIntValue(numRows);
+				int cols = PropertyUtil.getPropertyIntValue(numCols);
+				int hgap = getHGap();
+				int vgap = getVGap();
+				GridLayout layout = new GridLayout(rows, cols, hgap, vgap);
+				getPanel().setLayout(layout);
+			}
 		}
 
 	}

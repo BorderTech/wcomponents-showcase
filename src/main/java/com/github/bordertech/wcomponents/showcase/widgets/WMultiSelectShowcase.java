@@ -3,7 +3,6 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
-import com.github.bordertech.wcomponents.Margin;
 import com.github.bordertech.wcomponents.WAjaxControl;
 import com.github.bordertech.wcomponents.WButton;
 import com.github.bordertech.wcomponents.WDropdown;
@@ -12,9 +11,8 @@ import com.github.bordertech.wcomponents.WLabel;
 import com.github.bordertech.wcomponents.WMessages;
 import com.github.bordertech.wcomponents.WMultiSelect;
 import com.github.bordertech.wcomponents.WNumberField;
-import com.github.bordertech.wcomponents.WPanel;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
@@ -40,7 +38,7 @@ public class WMultiSelectShowcase extends AbstractShowcase<WMultiSelect> {
 
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WMultiSelect> itemPanel) {
-		return new PropertiesPanel(itemPanel.getWidget());
+		return new PropertiesPanel(itemPanel);
 	}
 
 	@Override
@@ -48,7 +46,7 @@ public class WMultiSelectShowcase extends AbstractShowcase<WMultiSelect> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<WMultiSelect> {
+	public static class SamplePanel extends AbstractInputSample<WMultiSelect> {
 
 		private final WMultiSelect widget;
 
@@ -105,8 +103,6 @@ public class WMultiSelectShowcase extends AbstractShowcase<WMultiSelect> {
 			widget.setDefaultSubmitButton(button);
 			// SAMPLE-FINISH
 
-			messages.setMargin(new Margin(0, 0, 12, 0));
-
 		}
 
 		@Override
@@ -119,14 +115,22 @@ public class WMultiSelectShowcase extends AbstractShowcase<WMultiSelect> {
 			return widget;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public WMessages getMessages() {
+			return messages;
+		}
+
 	}
 
 	public static class PropertiesPanel extends AbstractMultiSelectPropertyContainer<WMultiSelect> {
 
 		private final WNumberField numRows = new WNumberField();
 
-		public PropertiesPanel(final WMultiSelect widget) {
-			super(widget, widget);
+		public PropertiesPanel(final SampleContainer<WMultiSelect> sampleContainer) {
+			super(sampleContainer);
 			numRows.setMinValue(1);
 			addPropertyWidget("Rows", numRows);
 		}

@@ -1,8 +1,8 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
-import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.WComponent;
 import com.github.bordertech.wcomponents.WTextField;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 
 /**
@@ -14,8 +14,8 @@ public abstract class AbstractTooltipPropertyContainer<T extends WComponent> ext
 	// Tooltip
 	private final WTextField txtTooltip = new WTextField();
 
-	public AbstractTooltipPropertyContainer(final T widget, final AjaxTarget target) {
-		super(widget, target);
+	public AbstractTooltipPropertyContainer(final SampleContainer<T> sampleContainer) {
+		super(sampleContainer);
 
 		// Tooltip
 		addPropertyWidget("Tooltip", txtTooltip);

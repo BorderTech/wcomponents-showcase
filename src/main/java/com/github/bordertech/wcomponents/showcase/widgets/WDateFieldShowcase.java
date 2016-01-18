@@ -2,16 +2,14 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
-import com.github.bordertech.wcomponents.Margin;
 import com.github.bordertech.wcomponents.WButton;
 import com.github.bordertech.wcomponents.WDateField;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WLabel;
 import com.github.bordertech.wcomponents.WMessages;
-import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WPartialDateField;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
 import java.util.Arrays;
@@ -37,7 +35,7 @@ public class WDateFieldShowcase extends AbstractShowcase<WDateField> {
 
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WDateField> itemPanel) {
-		return new PropertiesPanel(itemPanel.getWidget());
+		return new PropertiesPanel(itemPanel);
 	}
 
 	@Override
@@ -45,7 +43,7 @@ public class WDateFieldShowcase extends AbstractShowcase<WDateField> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<WDateField> {
+	public static class SamplePanel extends AbstractInputSample<WDateField> {
 
 		private final WDateField widget;
 
@@ -89,8 +87,6 @@ public class WDateFieldShowcase extends AbstractShowcase<WDateField> {
 			widget.setDefaultSubmitButton(button);
 			// SAMPLE-FINISH
 
-			messages.setMargin(new Margin(0, 0, 12, 0));
-
 		}
 
 		@Override
@@ -103,6 +99,14 @@ public class WDateFieldShowcase extends AbstractShowcase<WDateField> {
 			return widget;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public WMessages getMessages() {
+			return messages;
+		}
+
 	}
 
 	public static class PropertiesPanel extends AbstractInputPropertyContainer<WDateField> {
@@ -110,8 +114,8 @@ public class WDateFieldShowcase extends AbstractShowcase<WDateField> {
 		private final WDateField minDate = new WDateField();
 		private final WDateField maxDate = new WDateField();
 
-		public PropertiesPanel(final WDateField widget) {
-			super(widget, widget);
+		public PropertiesPanel(final SampleContainer<WDateField> sampleContainer) {
+			super(sampleContainer);
 
 			addPropertyWidget("Min date", minDate);
 			addPropertyWidget("Max date", maxDate);

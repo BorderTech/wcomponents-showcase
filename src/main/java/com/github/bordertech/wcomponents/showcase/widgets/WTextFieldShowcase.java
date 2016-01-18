@@ -2,17 +2,15 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
-import com.github.bordertech.wcomponents.Margin;
 import com.github.bordertech.wcomponents.WButton;
 import com.github.bordertech.wcomponents.WFieldLayout;
 import com.github.bordertech.wcomponents.WLabel;
 import com.github.bordertech.wcomponents.WMessages;
 import com.github.bordertech.wcomponents.WNumberField;
-import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WTextArea;
 import com.github.bordertech.wcomponents.WTextField;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.util.PropertyUtil;
 import com.github.bordertech.wcomponents.validation.Diagnostic;
 import com.github.bordertech.wcomponents.validation.ValidatingAction;
@@ -40,7 +38,7 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WTextField> itemPanel) {
-		return new PropertiesPanel(itemPanel.getWidget());
+		return new PropertiesPanel(itemPanel);
 	}
 
 	@Override
@@ -48,7 +46,7 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<WTextField> {
+	public static class SamplePanel extends AbstractInputSample<WTextField> {
 
 		private final WTextField widget;
 
@@ -92,8 +90,6 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 			widget.setDefaultSubmitButton(button);
 			// SAMPLE-FINISH
 
-			messages.setMargin(new Margin(0, 0, 12, 0));
-
 		}
 
 		@Override
@@ -106,9 +102,17 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 			return widget;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public WMessages getMessages() {
+			return messages;
+		}
+
 	}
 
-	public static class PropertiesPanel extends AbstractInputPropertyContainer<WTextField> {
+	public static class PropertiesPanel<T extends WTextField> extends AbstractInputPropertyContainer<T> {
 
 		private final WNumberField numCols = new WNumberField();
 		private final WNumberField numMinLength = new WNumberField();
@@ -126,8 +130,8 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 			}
 		};
 
-		public PropertiesPanel(final WTextField widget) {
-			super(widget, widget);
+		public PropertiesPanel(final SampleContainer<T> sampleContainer) {
+			super(sampleContainer);
 
 			numCols.setMinValue(1);
 			numMaxLength.setMinValue(1);
@@ -137,13 +141,10 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 			addPropertyWidget("Min length", numMinLength);
 			addPropertyWidget("Max length", numMaxLength);
 			addPropertyWidget("Pattern", txtPattern);
-
-//		private Pattern pattern;
-//		private WSuggestions suggestions;
 		}
 
 		@Override
-		protected void configWidgetProperties(final WTextField widget) {
+		protected void configWidgetProperties(final T widget) {
 			super.configWidgetProperties(widget);
 			widget.setColumns(PropertyUtil.getPropertyIntValue(numCols));
 			widget.setMaxLength(PropertyUtil.getPropertyIntValue(numMaxLength));

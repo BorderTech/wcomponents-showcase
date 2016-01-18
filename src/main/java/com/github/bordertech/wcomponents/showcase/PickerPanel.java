@@ -1,5 +1,6 @@
 package com.github.bordertech.wcomponents.showcase;
 
+import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
@@ -12,7 +13,7 @@ import com.github.bordertech.wcomponents.WMenuItem;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WSubMenu;
 import com.github.bordertech.wcomponents.WebUtilities;
-import com.github.bordertech.wcomponents.showcase.util.DataUtil;
+import com.github.bordertech.wcomponents.showcase.util.ConfigUtil;
 import com.github.bordertech.wcomponents.util.Util;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class PickerPanel extends WPanel {
 		add(menu);
 		add(ajaxContainer);
 
-		for (Map.Entry<String, Showcase[]> entry : DataUtil.getShowcases().entrySet()) {
+		for (Map.Entry<String, Showcase[]> entry : ConfigUtil.getShowcases().entrySet()) {
 			addExamples(entry.getKey(), entry.getValue());
 		}
 

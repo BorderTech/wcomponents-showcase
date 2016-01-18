@@ -5,9 +5,8 @@ import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WPartialDateField;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.layout.BorderLayout;
-import com.github.bordertech.wcomponents.layout.FlowLayout;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +31,7 @@ public class BorderLayoutShowcase extends AbstractShowcase<BorderLayout> {
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<BorderLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
-		return new PropertiesPanel(sample.getPanel());
+		return new PropertiesPanel(sample, sample.getPanel());
 	}
 
 	@Override
@@ -40,27 +39,23 @@ public class BorderLayoutShowcase extends AbstractShowcase<BorderLayout> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<BorderLayout> {
+	public static class SamplePanel extends AbstractLayoutSample<BorderLayout> {
 
 		private final WPanel panel;
 
 		public SamplePanel() {
 
-			WPanel box = new WPanel(Type.FEATURE);
-			add(box);
-
 			// SAMPLE-START
 			panel = new WPanel();
-			panel.setLayout(new BorderLayout(6, 6));
+			panel.setLayout(new BorderLayout());
 			for (BorderLayout.BorderLayoutConstraint location : BorderLayout.BorderLayoutConstraint.values()) {
 				WPanel child = new WPanel(Type.BOX);
-				child.setLayout(new FlowLayout(FlowLayout.Alignment.CENTER));
 				child.add(new WText(location.name()));
 				panel.add(child, location);
 			}
 			// SAMPLE-FINISH
 
-			box.add(panel);
+			add(panel);
 		}
 
 		@Override
@@ -80,8 +75,8 @@ public class BorderLayoutShowcase extends AbstractShowcase<BorderLayout> {
 
 	public static class PropertiesPanel extends AbstractLayoutPropertyContainer<BorderLayout> {
 
-		public PropertiesPanel(final WPanel panel) {
-			super(panel);
+		public PropertiesPanel(final SampleContainer<BorderLayout> sampleContainer, final WPanel panel) {
+			super(sampleContainer, panel);
 		}
 
 		@Override

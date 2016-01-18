@@ -2,15 +2,15 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.WCheckBoxSelect;
-import com.github.bordertech.wcomponents.WDropdown;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WPartialDateField;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.WTextField;
 import com.github.bordertech.wcomponents.layout.FlowLayout;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
-import java.util.ArrayList;
+import com.github.bordertech.wcomponents.showcase.common.MarginCheckboxSelect;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.TypeWDropdown;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +34,7 @@ public class WPanelShowcase extends AbstractShowcase<WPanel> {
 
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WPanel> itemPanel) {
-		return new PropertiesPanel(itemPanel.getWidget());
+		return new PropertiesPanel(itemPanel);
 	}
 
 	@Override
@@ -42,14 +42,11 @@ public class WPanelShowcase extends AbstractShowcase<WPanel> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<WPanel> {
+	public static class SamplePanel extends AbstractLayoutSample<WPanel> {
 
 		private final WPanel widget;
 
 		public SamplePanel() {
-
-			WPanel box = new WPanel(Type.FEATURE);
-			add(box);
 
 			// SAMPLE-START
 			widget = new WPanel();
@@ -57,7 +54,7 @@ public class WPanelShowcase extends AbstractShowcase<WPanel> {
 			widget.add(new WText("Content"));
 			// SAMPLE-FINISH
 
-			box.add(widget);
+			add(widget);
 
 		}
 
@@ -75,36 +72,28 @@ public class WPanelShowcase extends AbstractShowcase<WPanel> {
 
 	public static class PropertiesPanel extends AbstractPropertyContainer<WPanel> {
 
-		private final WDropdown drpType = new WDropdown();
+		private final TypeWDropdown<Type> drpType = new TypeWDropdown<>(Type.values(), true);
 		private final WTextField txtTitle = new WTextField();
-		private final WDropdown drpMode = new WDropdown();
+		private final TypeWDropdown<PanelMode> drpMode = new TypeWDropdown<>(PanelMode.values(), true);
 
 		private final WCheckBoxSelect cbsMargin = new MarginCheckboxSelect();
 
-		public PropertiesPanel(final WPanel widget) {
-			super(widget, widget);
+		public PropertiesPanel(final SampleContainer<WPanel> sampleContainer) {
+			super(sampleContainer);
 
-			List<Type> types = new ArrayList<>(Arrays.asList(Type.values()));
-			types.add(0, null);
-			drpType.setOptions(types);
-
-			List<PanelMode> modes = new ArrayList<>(Arrays.asList(PanelMode.values()));
-			modes.add(0, null);
-			drpMode.setOptions(modes);
-
+			addPropertyWidget("Margin", cbsMargin);
 			addPropertyWidget("Type", drpType);
 			addPropertyWidget("Title", txtTitle);
 			addPropertyWidget("Mode", drpMode);
-			addPropertyWidget("Margin", cbsMargin);
 
 		}
 
 		@Override
 		protected void configWidgetProperties(final WPanel widget) {
-			widget.setType((Type) drpType.getSelected());
-			widget.setTitleText(txtTitle.getText());
-			widget.setMode((PanelMode) drpMode.getSelected());
 			MarginCheckboxSelect.configMargin(widget, cbsMargin.getSelected());
+			widget.setType(drpType.getSelected());
+			widget.setTitleText(txtTitle.getText());
+			widget.setMode(drpMode.getSelected());
 		}
 
 	}

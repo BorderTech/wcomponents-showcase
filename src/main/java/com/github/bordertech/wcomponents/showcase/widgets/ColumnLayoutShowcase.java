@@ -1,14 +1,13 @@
 package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.AjaxTarget;
-import com.github.bordertech.wcomponents.WDropdown;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WPartialDateField;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.layout.ColumnLayout;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
-import java.util.ArrayList;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.TypeWDropdown;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +32,7 @@ public class ColumnLayoutShowcase extends AbstractShowcase<ColumnLayout> {
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<ColumnLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
-		return new PropertiesPanel(sample.getPanel());
+		return new PropertiesPanel(itemPanel, sample.getPanel());
 	}
 
 	@Override
@@ -41,27 +40,23 @@ public class ColumnLayoutShowcase extends AbstractShowcase<ColumnLayout> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<ColumnLayout> {
+	public static class SamplePanel extends AbstractLayoutSample<ColumnLayout> {
 
 		private final WPanel panel;
 
 		public SamplePanel() {
 
-			WPanel box = new WPanel(Type.FEATURE);
-			add(box);
-
 			// SAMPLE-START
 			panel = new WPanel();
-			panel.setLayout(new ColumnLayout(new int[]{33, 34, 33}, 6, 6));
-			for (int i = 1; i < 4; i++) {
-//				panel.add(new WText("Child " + i));
+			panel.setLayout(new ColumnLayout(new int[]{33, 34, 33}));
+			for (int i = 1; i < 7; i++) {
 				WPanel child = new WPanel(Type.BOX);
 				child.add(new WText("Child " + i));
 				panel.add(child);
 			}
 			// SAMPLE-FINISH
 
-			box.add(panel);
+			add(panel);
 		}
 
 		@Override
@@ -81,13 +76,10 @@ public class ColumnLayoutShowcase extends AbstractShowcase<ColumnLayout> {
 
 	public static class PropertiesPanel extends AbstractLayoutPropertyContainer<ColumnLayout> {
 
-		private final WDropdown drpAlignment = new WDropdown();
+		private final TypeWDropdown<ColumnLayout.Alignment> drpAlignment = new TypeWDropdown<>(ColumnLayout.Alignment.values(), true);
 
-		public PropertiesPanel(final WPanel panel) {
-			super(panel);
-			List<ColumnLayout.Alignment> alignments = new ArrayList<>(Arrays.asList(ColumnLayout.Alignment.values()));
-			alignments.add(0, null);
-			drpAlignment.setOptions(alignments);
+		public PropertiesPanel(final SampleContainer<ColumnLayout> sampleContainer, final WPanel panel) {
+			super(sampleContainer, panel);
 			drpAlignment.setSelected(ColumnLayout.Alignment.CENTER);
 			addPropertyWidget("Alignment", drpAlignment);
 		}
@@ -98,7 +90,7 @@ public class ColumnLayoutShowcase extends AbstractShowcase<ColumnLayout> {
 			int hgap = getHGap();
 			int vgap = getVGap();
 			ColumnLayout.Alignment[] alignments = null;
-			ColumnLayout.Alignment selected = (ColumnLayout.Alignment) drpAlignment.getSelected();
+			ColumnLayout.Alignment selected = drpAlignment.getSelected();
 			if (selected != null) {
 				alignments = new ColumnLayout.Alignment[3];
 				Arrays.fill(alignments, selected);

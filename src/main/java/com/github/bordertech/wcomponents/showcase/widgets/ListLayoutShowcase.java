@@ -2,13 +2,13 @@ package com.github.bordertech.wcomponents.showcase.widgets;
 
 import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.WCheckBox;
-import com.github.bordertech.wcomponents.WDropdown;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WPartialDateField;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.layout.ListLayout;
-import com.github.bordertech.wcomponents.showcase.PropertyContainer;
-import com.github.bordertech.wcomponents.showcase.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.TypeWDropdown;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +33,7 @@ public class ListLayoutShowcase extends AbstractShowcase<ListLayout> {
 	@Override
 	public PropertyContainer getPropertyContainerInstance(final SampleContainer<ListLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
-		return new PropertiesPanel(sample.getPanel());
+		return new PropertiesPanel(itemPanel, sample.getPanel());
 	}
 
 	@Override
@@ -41,18 +41,15 @@ public class ListLayoutShowcase extends AbstractShowcase<ListLayout> {
 		return RELATED;
 	}
 
-	public static class SamplePanel extends WPanel implements SampleContainer<ListLayout> {
+	public static class SamplePanel extends AbstractLayoutSample<ListLayout> {
 
 		private final WPanel panel;
 
 		public SamplePanel() {
 
-			WPanel box = new WPanel(Type.FEATURE);
-			add(box);
-
 			// SAMPLE-START
 			panel = new WPanel();
-			panel.setLayout(new ListLayout(ListLayout.Type.STACKED, ListLayout.Alignment.LEFT, ListLayout.Separator.NONE, false, 6, 6));
+			panel.setLayout(new ListLayout(ListLayout.Type.STACKED, ListLayout.Alignment.LEFT, ListLayout.Separator.NONE, false));
 			for (int i = 1; i < 4; i++) {
 				WPanel child = new WPanel(Type.BOX);
 				child.add(new WText("Child " + i));
@@ -60,7 +57,7 @@ public class ListLayoutShowcase extends AbstractShowcase<ListLayout> {
 			}
 			// SAMPLE-FINISH
 
-			box.add(panel);
+			add(panel);
 		}
 
 		@Override
@@ -80,13 +77,13 @@ public class ListLayoutShowcase extends AbstractShowcase<ListLayout> {
 
 	public static class PropertiesPanel extends AbstractLayoutPropertyContainer<ListLayout> {
 
-		private final WDropdown drpAlignment = new WDropdown(ListLayout.Alignment.values());
-		private final WDropdown drpType = new WDropdown(ListLayout.Type.values());
-		private final WDropdown drpSeparator = new WDropdown(ListLayout.Separator.values());
+		private final TypeWDropdown<ListLayout.Alignment> drpAlignment = new TypeWDropdown<>(ListLayout.Alignment.values());
+		private final TypeWDropdown<ListLayout.Type> drpType = new TypeWDropdown<>(ListLayout.Type.values());
+		private final TypeWDropdown<ListLayout.Separator> drpSeparator = new TypeWDropdown<>(ListLayout.Separator.values());
 		private final WCheckBox chbOrdered = new WCheckBox();
 
-		public PropertiesPanel(final WPanel panel) {
-			super(panel);
+		public PropertiesPanel(final SampleContainer<ListLayout> sampleContainer, final WPanel panel) {
+			super(sampleContainer, panel);
 
 			drpAlignment.setSelected(ListLayout.Alignment.LEFT);
 			drpType.setSelected(ListLayout.Type.STACKED);
@@ -103,12 +100,7 @@ public class ListLayoutShowcase extends AbstractShowcase<ListLayout> {
 			super.configWidgetProperties(widget);
 			int hgap = getHGap();
 			int vgap = getVGap();
-			ListLayout.Alignment alignment = (ListLayout.Alignment) drpAlignment.getSelected();
-			ListLayout.Type type = (ListLayout.Type) drpType.getSelected();
-			ListLayout.Separator separator = (ListLayout.Separator) drpSeparator.getSelected();
-			boolean ordered = chbOrdered.isSelected();
-
-			ListLayout layout = new ListLayout(type, alignment, separator, ordered, hgap, vgap);
+			ListLayout layout = new ListLayout(drpType.getSelected(), drpAlignment.getSelected(), drpSeparator.getSelected(), chbOrdered.isSelected(), hgap, vgap);
 			getPanel().setLayout(layout);
 		}
 
