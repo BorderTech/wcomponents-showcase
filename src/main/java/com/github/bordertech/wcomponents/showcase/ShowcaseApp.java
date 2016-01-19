@@ -1,8 +1,5 @@
 package com.github.bordertech.wcomponents.showcase;
 
-import com.github.bordertech.wcomponents.showcase.common.Showcase;
-import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
-import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
@@ -29,6 +26,9 @@ import com.github.bordertech.wcomponents.WTabSet;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.WebUtilities;
 import com.github.bordertech.wcomponents.layout.FlowLayout;
+import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
+import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
+import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.util.Config;
 import java.util.Date;
 
@@ -40,7 +40,12 @@ import java.util.Date;
  */
 public class ShowcaseApp extends WApplication implements MessageContainer {
 
-	private final WMessages messages = new WMessages();
+	private final WMessages messages = new WMessages() {
+		@Override
+		public boolean isHidden() {
+			return !hasMessages();
+		}
+	};
 
 	private final WPanel root = new WPanel();
 
