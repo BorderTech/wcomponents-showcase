@@ -4,20 +4,16 @@ import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
 import com.github.bordertech.wcomponents.HeadingLevel;
-import com.github.bordertech.wcomponents.InternalResource;
 import com.github.bordertech.wcomponents.Margin;
 import com.github.bordertech.wcomponents.Message;
 import com.github.bordertech.wcomponents.MessageContainer;
 import com.github.bordertech.wcomponents.Request;
-import com.github.bordertech.wcomponents.UIContext;
-import com.github.bordertech.wcomponents.UIContextHolder;
 import com.github.bordertech.wcomponents.WAjaxControl;
 import com.github.bordertech.wcomponents.WApplication;
 import com.github.bordertech.wcomponents.WButton;
 import com.github.bordertech.wcomponents.WColumn;
 import com.github.bordertech.wcomponents.WComponent;
 import com.github.bordertech.wcomponents.WContainer;
-import com.github.bordertech.wcomponents.WContent;
 import com.github.bordertech.wcomponents.WHeading;
 import com.github.bordertech.wcomponents.WMessages;
 import com.github.bordertech.wcomponents.WPanel;
@@ -29,7 +25,6 @@ import com.github.bordertech.wcomponents.layout.FlowLayout;
 import com.github.bordertech.wcomponents.showcase.common.PropertyContainer;
 import com.github.bordertech.wcomponents.showcase.common.SampleContainer;
 import com.github.bordertech.wcomponents.showcase.common.Showcase;
-import com.github.bordertech.wcomponents.util.Config;
 import java.util.Date;
 
 /**
@@ -60,19 +55,13 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	private final WContainer propertiesHolder = new WContainer();
 
 	/**
-	 * Additional Javascript used to provide syntax-highlighting client-side.
-	 */
-	private final WContent javascript = new WContent();
-
-	/**
-	 * Additional CSS used to provide syntax-highlighting client-side.
-	 */
-	private final WContent css = new WContent();
-
-	/**
 	 * Construct the controller.
 	 */
 	public ShowcaseApp() {
+
+		// Source syntax highlighting
+		addJsFile("/js/syntaxHighlight.js");
+		addCssFile("/css/syntaxHighlight.css");
 
 		setTitle("WComponents showcase");
 
@@ -191,16 +180,6 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		infoPanel.addAjaxTargets(pickerPanel, samplePanel, propertiesPanel, infoPanel, sourcePanel);
 
 		pickerPanel.addAjaxTargets(samplePanel, propertiesPanel, infoPanel, sourcePanel);
-
-		String version = Config.getInstance().getString("wcomponents-examples.version");
-		javascript.setCacheKey("wc.showcase.js." + version);
-		css.setCacheKey("wc.showcase.css." + version);
-
-		javascript.setContentAccess(new InternalResource("/js/syntaxHighlight.js", "syntaxHighlight.js"));
-		css.setContentAccess(new InternalResource("/css/syntaxHighlight.css", "syntaxHighlight.css"));
-		add(javascript);
-		add(css);
-
 	}
 
 	@Override
@@ -279,11 +258,6 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 			}
 			setInitialised(true);
 		}
-		UIContext uic = UIContextHolder.getCurrent();
-		uic.getHeaders().addUniqueHeadLine("<script type='text/javascript' src='" + WebUtilities.
-				encode(javascript.getUrl()) + "'></script>");
-		uic.getHeaders().addUniqueHeadLine(
-				"<link type='text/css' rel='stylesheet' href='" + WebUtilities.encode(css.getUrl()) + "'></link>");
 	}
 
 	private void removeShowcase() {
