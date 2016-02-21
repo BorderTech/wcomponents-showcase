@@ -91,7 +91,7 @@ public class WPanelShowcase extends AbstractShowcase<WPanel> {
 		@Override
 		protected void configWidgetProperties(final WPanel widget) {
 			MarginCheckboxSelect.configMargin(widget, cbsMargin.getSelected());
-			widget.setType(drpType.getSelected());
+			widget.setType(drpType.getSelected() == null ? WPanel.Type.PLAIN : drpType.getSelected());
 			widget.setTitleText(txtTitle.getText());
 			widget.setMode(drpMode.getSelected());
 		}

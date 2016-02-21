@@ -1,6 +1,5 @@
 package com.github.bordertech.wcomponents.showcase;
 
-import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
@@ -14,6 +13,7 @@ import com.github.bordertech.wcomponents.WLink;
 import com.github.bordertech.wcomponents.WList;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WText;
+import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.showcase.util.SourceUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +55,10 @@ public class InfoPanel extends WPanel {
 
 		apiSuperLinks.setSearchAncestors(false);
 		apiInterfaceLinks.setSearchAncestors(false);
+
+		relatedShowcases.setRowIdProperty("name");
+		apiSuperLinks.setRowIdProperty("name");
+		apiInterfaceLinks.setRowIdProperty("name");
 
 	}
 
