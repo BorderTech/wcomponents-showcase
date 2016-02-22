@@ -29,12 +29,12 @@ public class WDateFieldShowcase extends AbstractShowcase<WDateField> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<WDateField> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WDateField> itemPanel) {
+	public PropertyContainer<WDateField> getPropertyContainerInstance(final SampleContainer<WDateField> itemPanel) {
 		return new PropertiesPanel(itemPanel);
 	}
 

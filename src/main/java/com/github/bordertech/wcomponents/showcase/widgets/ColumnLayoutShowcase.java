@@ -25,12 +25,12 @@ public class ColumnLayoutShowcase extends AbstractShowcase<ColumnLayout> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<ColumnLayout> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<ColumnLayout> itemPanel) {
+	public PropertyContainer<ColumnLayout> getPropertyContainerInstance(final SampleContainer<ColumnLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
 		return new PropertiesPanel(itemPanel, sample.getPanel());
 	}

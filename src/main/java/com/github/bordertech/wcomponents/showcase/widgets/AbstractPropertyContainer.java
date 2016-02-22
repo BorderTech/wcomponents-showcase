@@ -20,7 +20,7 @@ import com.github.bordertech.wcomponents.validation.ValidatingAction;
  *
  * @author jonathan
  */
-public abstract class AbstractPropertyContainer<T> extends WPanel implements PropertyContainer, MessageContainer {
+public abstract class AbstractPropertyContainer<T> extends WPanel implements PropertyContainer<T>, MessageContainer {
 
 	private final WMessages messages = new WMessages() {
 		@Override
@@ -45,13 +45,13 @@ public abstract class AbstractPropertyContainer<T> extends WPanel implements Pro
 	}
 
 	@Override
-	public SampleContainer getSampleContainer() {
+	public SampleContainer<T> getSampleContainer() {
 		return sampleContainer;
 	}
 
 	@Override
 	public void configWidget() {
-		T sampleWidget = getWidget();
+		T sampleWidget = getSampleWidget();
 		configWidgetProperties(sampleWidget);
 	}
 
@@ -65,7 +65,7 @@ public abstract class AbstractPropertyContainer<T> extends WPanel implements Pro
 		field.setInputWidth(100);
 
 		// Setup AJAX
-		WAjaxControl ajax = new WAjaxControl(propertyTrigger, getAjaxTarget());
+		WAjaxControl ajax = new WAjaxControl(propertyTrigger, getSampleAjaxTarget());
 		ajax.addTarget(getMessages());
 		getAjaxContainer().add(ajax);
 
@@ -89,12 +89,12 @@ public abstract class AbstractPropertyContainer<T> extends WPanel implements Pro
 		return ajaxContainer;
 	}
 
-	protected T getWidget() {
-		return sampleContainer.getWidget();
+	protected T getSampleWidget() {
+		return getSampleContainer().getWidget();
 	}
 
-	protected AjaxTarget getAjaxTarget() {
-		return sampleContainer.getAjaxTarget();
+	protected AjaxTarget getSampleAjaxTarget() {
+		return getSampleContainer().getAjaxTarget();
 	}
 
 	@Override

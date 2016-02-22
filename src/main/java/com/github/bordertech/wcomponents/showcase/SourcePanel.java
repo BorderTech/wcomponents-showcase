@@ -1,12 +1,13 @@
 package com.github.bordertech.wcomponents.showcase;
 
-import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.RenderContext;
 import com.github.bordertech.wcomponents.Request;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WText;
 import com.github.bordertech.wcomponents.servlet.WebXmlRenderContext;
+import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.showcase.util.SourceUtil;
+import com.github.bordertech.wcomponents.util.Util;
 import java.io.PrintWriter;
 
 /**
@@ -41,9 +42,26 @@ public class SourcePanel extends WPanel {
 	protected void preparePaintComponent(final Request request) {
 		super.preparePaintComponent(request);
 		if (!isInitialised()) {
-			Showcase item = getShowcase();
-			String rawSource = SourceUtil.getSampleSource(item.getClass().getName());
-			source.setText(SourceUtil.formatSource(rawSource));
+			Showcase<?> item = getShowcase();
+			StringBuilder buffer = new StringBuilder();
+
+			// Get Showcase Sample Source
+			String rawSource = SourceUtil.getSampleByClassName(item.getClass().getName());
+			if (!item.getRelatedResources().isEmpty()) {
+				buffer.append("<H2>Showcase ...</H2>");
+			}
+			buffer.append(SourceUtil.formatSource(rawSource));
+
+			// Related (if any)
+			for (String rawResource : item.getRelatedResources()) {
+				// Get Related
+				String related = SourceUtil.getSample(rawResource);
+				if (!Util.empty(related)) {
+					buffer.append("<H2>").append(rawResource).append(" ...</H2>");
+					buffer.append(SourceUtil.formatSource(related));
+				}
+			}
+			source.setText(buffer.toString());
 		}
 	}
 
@@ -62,7 +80,7 @@ public class SourcePanel extends WPanel {
 				"<script type='text/javascript'>if (window.doHighlighting) doHighlighting('" + getId() + "');</script>");
 	}
 
-	private Showcase getShowcase() {
+	private Showcase<?> getShowcase() {
 		return (Showcase) getBean();
 	}
 

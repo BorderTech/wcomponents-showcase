@@ -25,12 +25,12 @@ public class FlowLayoutShowcase extends AbstractShowcase<FlowLayout> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<FlowLayout> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<FlowLayout> itemPanel) {
+	public PropertyContainer<FlowLayout> getPropertyContainerInstance(final SampleContainer<FlowLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
 		return new PropertiesPanel(itemPanel, sample.getPanel());
 	}

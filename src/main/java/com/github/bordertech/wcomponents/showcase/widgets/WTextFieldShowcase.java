@@ -32,12 +32,12 @@ public class WTextFieldShowcase extends AbstractShowcase<WTextField> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<WTextField> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WTextField> itemPanel) {
+	public PropertyContainer<WTextField> getPropertyContainerInstance(final SampleContainer<WTextField> itemPanel) {
 		return new PropertiesPanel(itemPanel);
 	}
 

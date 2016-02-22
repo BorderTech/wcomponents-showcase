@@ -32,12 +32,12 @@ public class WDropdownShowcase extends AbstractShowcase<WDropdown> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<WDropdown> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WDropdown> itemPanel) {
+	public PropertyContainer<WDropdown> getPropertyContainerInstance(final SampleContainer<WDropdown> itemPanel) {
 		return new PropertiesPanel(itemPanel);
 	}
 

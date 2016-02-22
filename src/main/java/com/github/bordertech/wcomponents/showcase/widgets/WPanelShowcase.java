@@ -28,12 +28,12 @@ public class WPanelShowcase extends AbstractShowcase<WPanel> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<WPanel> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WPanel> itemPanel) {
+	public PropertyContainer<WPanel> getPropertyContainerInstance(final SampleContainer<WPanel> itemPanel) {
 		return new PropertiesPanel(itemPanel);
 	}
 

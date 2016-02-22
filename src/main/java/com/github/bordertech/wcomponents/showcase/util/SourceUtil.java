@@ -36,19 +36,24 @@ public final class SourceUtil {
 	private SourceUtil() {
 	}
 
+	public static String getSourceByClassName(final String className) {
+		String sourcePath = '/' + className.replace('.', '/') + ".java";
+		return getSource(sourcePath);
+
+	}
+
 	/**
-	 * Tries to obtain the source file for the given class.
+	 * Tries to obtain the resource file.
 	 *
-	 * @param className the name of the class to find the source for.
-	 * @return the source file for the given class, or null on error.
+	 * @param resourceName the name of the resource and its path
+	 * @return the resource as a string
 	 */
-	public static String getSource(final String className) {
-		String sourceName = '/' + className.replace('.', '/') + ".java";
+	public static String getSource(final String resourceName) {
 
 		InputStream stream = null;
 
 		try {
-			stream = WTextField.class.getResourceAsStream(sourceName);
+			stream = WTextField.class.getResourceAsStream(resourceName);
 
 			if (stream != null) {
 				byte[] sourceBytes = StreamUtil.getBytes(stream);
@@ -57,7 +62,7 @@ public final class SourceUtil {
 				return new String(sourceBytes, "UTF-8");
 			}
 		} catch (IOException e) {
-			LOG.warn("Unable to read source code for class " + className, e);
+			LOG.warn("Unable to read source code for class " + resourceName, e);
 		} finally {
 			if (stream != null) {
 				try {
@@ -74,12 +79,12 @@ public final class SourceUtil {
 	/**
 	 * @param source the source to extract java doc from
 	 */
-	public static String getJavaDoc(final String source) {
+	public static String extractJavaDoc(final String source) {
 
 		if (source == null) {
 			return ("<p>Unable to extract JavaDoc, no source available.</p>");
 		} else {
-			StringBuilder javaDoc = extractJavaDoc(source);
+			StringBuilder javaDoc = extractJavaDocFromSource(source);
 			stripAsterisk(javaDoc);
 			stripLinks(javaDoc);
 			return ("<div>" + javaDoc.toString() + "</div>");
@@ -99,9 +104,21 @@ public final class SourceUtil {
 		return formattedSource;
 	}
 
-	public static String getSampleSource(final String className) {
+	public static String getSampleByClassName(final String className) {
 
-		String source = getSource(className);
+		String source = getSourceByClassName(className);
+		return extractSampleSource(source);
+
+	}
+
+	public static String getSample(final String resourceName) {
+
+		String source = getSource(resourceName);
+		return extractSampleSource(source);
+
+	}
+
+	private static String extractSampleSource(final String source) {
 
 		if (source == null) {
 			return "";
@@ -135,7 +152,7 @@ public final class SourceUtil {
 	 * @param source string representing the java class.
 	 * @return a String builder containing the javadoc.
 	 */
-	private static StringBuilder extractJavaDoc(final String source) {
+	private static StringBuilder extractJavaDocFromSource(final String source) {
 		int docStart = source.indexOf("/**");
 		int docEnd = source.indexOf("*/", docStart);
 		int classStart = source.indexOf("public class");

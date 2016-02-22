@@ -50,7 +50,7 @@ public abstract class AbstractLayoutPropertyContainer<T extends LayoutManager> e
 	}
 
 	@Override
-	protected T getWidget() {
+	protected T getSampleWidget() {
 		return (T) panel.getLayout();
 	}
 

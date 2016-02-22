@@ -1,6 +1,5 @@
 package com.github.bordertech.wcomponents.showcase;
 
-import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.Action;
 import com.github.bordertech.wcomponents.ActionEvent;
 import com.github.bordertech.wcomponents.AjaxTarget;
@@ -13,6 +12,7 @@ import com.github.bordertech.wcomponents.WMenuItem;
 import com.github.bordertech.wcomponents.WPanel;
 import com.github.bordertech.wcomponents.WSubMenu;
 import com.github.bordertech.wcomponents.WebUtilities;
+import com.github.bordertech.wcomponents.showcase.common.Showcase;
 import com.github.bordertech.wcomponents.showcase.util.ConfigUtil;
 import com.github.bordertech.wcomponents.util.Util;
 import java.util.Map;
@@ -40,7 +40,7 @@ public class PickerPanel extends WPanel {
 
 	}
 
-	public Showcase selectDefaultShowcase() {
+	public Showcase<?> selectDefaultShowcase() {
 		WSubMenu subMenu = null;
 		for (MenuItem item : menu.getMenuItems(true)) {
 			if (item instanceof WSubMenu) {
@@ -56,14 +56,14 @@ public class PickerPanel extends WPanel {
 		return null;
 	}
 
-	public Showcase selectShowcaseByWidgetClass(final Class clazz) {
+	public Showcase<?> selectShowcaseByWidgetClass(final Class clazz) {
 		WSubMenu subMenu = null;
 		for (MenuItem item : menu.getMenuItems(true)) {
 			if (item instanceof WSubMenu) {
 				subMenu = (WSubMenu) item;
 			} else if (item instanceof WMenuItem) {
 				WMenuItem menuItem = (WMenuItem) item;
-				Showcase showcase = (Showcase) menuItem.getActionObject();
+				Showcase<?> showcase = (Showcase) menuItem.getActionObject();
 				if (Util.equals(clazz, showcase.getWidgetClass())) {
 					menu.setSelectedMenuItem(menuItem);
 					subMenu.setOpen(true);
@@ -74,15 +74,15 @@ public class PickerPanel extends WPanel {
 		return null;
 	}
 
-	public Showcase getNextShowcase() {
+	public Showcase<?> getNextShowcase() {
 		return selectNextPrevShowcase(true);
 	}
 
-	public Showcase getPrevShowcase() {
+	public Showcase<?> getPrevShowcase() {
 		return selectNextPrevShowcase(false);
 	}
 
-	private Showcase selectNextPrevShowcase(final boolean next) {
+	private Showcase<?> selectNextPrevShowcase(final boolean next) {
 
 		// Check if an item is selected
 		WMenuItem currentItem = (WMenuItem) menu.getSelectedMenuItem();
@@ -113,7 +113,7 @@ public class PickerPanel extends WPanel {
 		}
 
 		WMenuItem newItem = (WMenuItem) subMenu.getMenuItems().get(idx);
-		Showcase newShowcase = (Showcase) newItem.getActionObject();
+		Showcase<?> newShowcase = (Showcase) newItem.getActionObject();
 
 		menu.setSelectedMenuItem(newItem);
 		return newShowcase;
@@ -144,7 +144,7 @@ public class PickerPanel extends WPanel {
 			item.setAction(new Action() {
 				@Override
 				public void execute(final ActionEvent event) {
-					Showcase item = (Showcase) event.getActionObject();
+					Showcase<?> item = (Showcase) event.getActionObject();
 					ctrl.doDisplayShowcase(item);
 				}
 			});

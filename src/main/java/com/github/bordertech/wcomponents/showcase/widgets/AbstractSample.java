@@ -16,7 +16,7 @@ public abstract class AbstractSample<T> extends WPanel implements SampleContaine
 	protected void preparePaintComponent(final Request request) {
 		super.preparePaintComponent(request);
 		if (!isInitialised()) {
-			// Make sample same the same as the default properties
+			// Make sample the same as the default properties
 			ShowcaseApp.getInstance(this).doConfigWidget();
 			setInitialised(true);
 		}

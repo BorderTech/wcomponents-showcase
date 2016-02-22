@@ -71,10 +71,10 @@ public class InfoPanel extends WPanel {
 	protected void preparePaintComponent(final Request request) {
 		super.preparePaintComponent(request);
 		if (!isInitialised()) {
-			Showcase item = getShowcase();
+			Showcase<?> item = getShowcase();
 			// Javadoc for Info Text
-			String rawSource = SourceUtil.getSource(item.getWidgetClass().getName());
-			String info = SourceUtil.getJavaDoc(rawSource);
+			String rawSource = SourceUtil.getSourceByClassName(item.getWidgetClass().getName());
+			String info = SourceUtil.extractJavaDoc(rawSource);
 			txtInfo.setText(info);
 			// API Links
 			setupApiLinks(item.getWidgetClass());
@@ -82,7 +82,7 @@ public class InfoPanel extends WPanel {
 		}
 	}
 
-	private Showcase getShowcase() {
+	private Showcase<?> getShowcase() {
 		return (Showcase) getBean();
 	}
 

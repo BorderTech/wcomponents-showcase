@@ -28,12 +28,12 @@ public class GridLayoutShowcase extends AbstractShowcase<GridLayout> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<GridLayout> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<GridLayout> itemPanel) {
+	public PropertyContainer<GridLayout> getPropertyContainerInstance(final SampleContainer<GridLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
 		return new PropertiesPanel(itemPanel, sample.getPanel());
 	}

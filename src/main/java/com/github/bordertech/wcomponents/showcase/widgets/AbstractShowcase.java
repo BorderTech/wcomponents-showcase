@@ -26,4 +26,9 @@ public abstract class AbstractShowcase<T> implements Showcase<T> {
 		return Collections.EMPTY_LIST;
 	}
 
+	@Override
+	public List<String> getRelatedResources() {
+		return Collections.EMPTY_LIST;
+	}
+
 }

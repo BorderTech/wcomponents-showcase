@@ -188,14 +188,14 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	}
 
 	public void doPreviousShowcase() {
-		Showcase showcase = pickerPanel.getPrevShowcase();
+		Showcase<?> showcase = pickerPanel.getPrevShowcase();
 		if (showcase != null) {
 			doDisplayShowcase(showcase);
 		}
 	}
 
 	public void doNextShowcase() {
-		Showcase showcase = pickerPanel.getNextShowcase();
+		Showcase<?> showcase = pickerPanel.getNextShowcase();
 		if (showcase != null) {
 			doDisplayShowcase(showcase);
 		}
@@ -203,31 +203,31 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	}
 
 	public void doDisplayShowcaseByWidgetClass(final Class clazz) {
-		Showcase showcase = pickerPanel.selectShowcaseByWidgetClass(clazz);
+		Showcase<?> showcase = pickerPanel.selectShowcaseByWidgetClass(clazz);
 		if (showcase != null) {
 			doDisplayShowcase(showcase);
 		}
 	}
 
 	public void doConfigWidget() {
-		PropertyContainer prop = getPropertyContainer();
+		PropertyContainer<?> prop = getPropertyContainer();
 		if (prop != null) {
 			prop.configWidget();
 		}
 	}
 
 	public void doResetShowcase() {
-		SampleContainer sample = getSampleContainer();
+		SampleContainer<?> sample = getSampleContainer();
 		if (sample != null) {
 			sample.reset();
 		}
-		PropertyContainer prop = getPropertyContainer();
+		PropertyContainer<?> prop = getPropertyContainer();
 		if (prop != null) {
 			prop.reset();
 		}
 	}
 
-	public void doDisplayShowcase(final Showcase showcase) {
+	public void doDisplayShowcase(final Showcase<?> showcase) {
 
 		removeShowcase();
 
@@ -252,7 +252,7 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 	protected void preparePaintComponent(final Request request) {
 		super.preparePaintComponent(request);
 		if (!isInitialised()) {
-			Showcase showcase = pickerPanel.selectDefaultShowcase();
+			Showcase<?> showcase = pickerPanel.selectDefaultShowcase();
 			if (showcase != null) {
 				doDisplayShowcase(showcase);
 			}
@@ -267,14 +267,14 @@ public class ShowcaseApp extends WApplication implements MessageContainer {
 		sourcePanel.reset();
 	}
 
-	private SampleContainer getSampleContainer() {
+	private SampleContainer<?> getSampleContainer() {
 		if (sampleHolder.getChildCount() > 0) {
 			return (SampleContainer) sampleHolder.getChildAt(0);
 		}
 		return null;
 	}
 
-	private PropertyContainer getPropertyContainer() {
+	private PropertyContainer<?> getPropertyContainer() {
 		if (propertiesHolder.getChildCount() > 0) {
 			return (PropertyContainer) propertiesHolder.getChildAt(0);
 		}

@@ -26,12 +26,12 @@ public class ListLayoutShowcase extends AbstractShowcase<ListLayout> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<ListLayout> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<ListLayout> itemPanel) {
+	public PropertyContainer<ListLayout> getPropertyContainerInstance(final SampleContainer<ListLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
 		return new PropertiesPanel(itemPanel, sample.getPanel());
 	}

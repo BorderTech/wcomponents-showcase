@@ -32,12 +32,12 @@ public class WMultiSelectShowcase extends AbstractShowcase<WMultiSelect> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<WMultiSelect> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WMultiSelect> itemPanel) {
+	public PropertyContainer<WMultiSelect> getPropertyContainerInstance(final SampleContainer<WMultiSelect> itemPanel) {
 		return new PropertiesPanel(itemPanel);
 	}
 

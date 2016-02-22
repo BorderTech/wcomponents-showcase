@@ -47,12 +47,12 @@ public class WTableShowcase extends AbstractShowcase<WTable> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<WTable> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WTable> itemPanel) {
+	public PropertyContainer<WTable> getPropertyContainerInstance(final SampleContainer<WTable> itemPanel) {
 		return new PropertiesPanel(itemPanel);
 	}
 

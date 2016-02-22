@@ -24,12 +24,12 @@ public class BorderLayoutShowcase extends AbstractShowcase<BorderLayout> {
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<BorderLayout> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<BorderLayout> itemPanel) {
+	public PropertyContainer<BorderLayout> getPropertyContainerInstance(final SampleContainer<BorderLayout> itemPanel) {
 		SamplePanel sample = (SamplePanel) itemPanel;
 		return new PropertiesPanel(sample, sample.getPanel());
 	}

@@ -28,12 +28,12 @@ public class WPartialDateFieldShowcase extends AbstractShowcase<WPartialDateFiel
 	}
 
 	@Override
-	public SampleContainer getSampleContainerInstance() {
+	public SampleContainer<WPartialDateField> getSampleContainerInstance() {
 		return new SamplePanel();
 	}
 
 	@Override
-	public PropertyContainer getPropertyContainerInstance(final SampleContainer<WPartialDateField> itemPanel) {
+	public PropertyContainer<WPartialDateField> getPropertyContainerInstance(final SampleContainer<WPartialDateField> itemPanel) {
 		return new PropertiesPanel(itemPanel);
 	}
 

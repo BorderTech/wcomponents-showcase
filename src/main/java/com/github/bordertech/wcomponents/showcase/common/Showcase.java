@@ -16,4 +16,6 @@ public interface Showcase<T> extends Serializable {
 	SampleContainer<T> getSampleContainerInstance();
 
 	List<Class> getRelatedWidgets();
+
+	List<String> getRelatedResources();
 }
